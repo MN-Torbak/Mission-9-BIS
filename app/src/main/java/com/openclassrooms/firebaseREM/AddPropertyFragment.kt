@@ -9,15 +9,16 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.openclassrooms.firebaseREM.Notifications.NotificationsWorker
 import com.openclassrooms.firebaseREM.viewmodel.MainViewModel
-import androidx.work.WorkManager
 
 
 class AddPropertyFragment : Fragment() {
 
     var mMainViewModel: MainViewModel? = null
     lateinit var type: TextView
+    lateinit var agentWhoAdd: TextView
     lateinit var price: TextView
     lateinit var avatar: TextView
     lateinit var description: TextView
@@ -27,6 +28,10 @@ class AddPropertyFragment : Fragment() {
     lateinit var numberOfRooms: Spinner
     lateinit var city: TextView
     lateinit var address: TextView
+    lateinit var createDate: DatePicker
+    lateinit var shops: CheckBox
+    lateinit var schools: CheckBox
+    lateinit var parc: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +57,11 @@ class AddPropertyFragment : Fragment() {
         city = rootView.findViewById(R.id.add_city_property)
         address = rootView.findViewById(R.id.add_address_property)
         numberOfRooms = rootView.findViewById(R.id.add_numberOfRooms_property)
+        createDate = rootView.findViewById(R.id.datePickerCreateDate)
+        shops = rootView.findViewById(R.id.checkBox_shops)
+        schools = rootView.findViewById(R.id.checkBox_schools)
+        parc = rootView.findViewById(R.id.checkBox_parc)
+        agentWhoAdd = rootView.findViewById(R.id.add_name_of_agent)
         val adapterForRooms = context?.let {
             ArrayAdapter.createFromResource(
                 it,
@@ -65,7 +75,9 @@ class AddPropertyFragment : Fragment() {
 
         rootView.findViewById<Button>(R.id.create).setOnClickListener {
 
-            if (!type.text.toString().equals("") && !price.text.toString().equals("") && !description.text.toString().equals("") && !surface.text.toString().equals(
+            if (!type.text.toString().equals("") && !price.text.toString()
+                    .equals("") && !description.text.toString()
+                    .equals("") && !surface.text.toString().equals(
                     ""
                 ) && !city.text.toString().equals("")
             ) {
@@ -79,10 +91,19 @@ class AddPropertyFragment : Fragment() {
                     Integer.parseInt(numberOfBathrooms.selectedItem.toString()),
                     Integer.parseInt(numberOfBedrooms.selectedItem.toString()),
                     city.text.toString(),
-                    address.text.toString()
-                )
+                    address.text.toString(),
+                    "" + createDate.getDayOfMonth() + "/" + (createDate.getMonth()+1) + "/" + createDate.getYear(),
+                    "",
+                    if (shops.isChecked) { true } else { false },
+                    if (schools.isChecked) { true } else { false },
+                    if (parc.isChecked) { true } else { false },
+                    agentWhoAdd.text.toString(),
+                    "",
+                    0
+                    )
                 val intent = Intent(context, ItemListActivity::class.java).apply {
                 }
+                createNotification()
                 context?.startActivity(intent)
             } else {
                 val text = "Please complete all the required fields"
@@ -91,15 +112,14 @@ class AddPropertyFragment : Fragment() {
                 toast.show()
             }
         }
-
         return rootView
     }
 
     fun createNotification() {
-        val oneTimeWorkRequest: OneTimeWorkRequest = OneTimeWorkRequest.Builder(NotificationsWorker::class.java)
-            //.setInitialDelay(getMilliseconds(), TimeUnit.MILLISECONDS)
-            .addTag("Notify")
-            .build()
+        val oneTimeWorkRequest: OneTimeWorkRequest =
+            OneTimeWorkRequest.Builder(NotificationsWorker::class.java)
+                .addTag("Notify")
+                .build()
         WorkManager.getInstance().enqueue(oneTimeWorkRequest)
     }
 

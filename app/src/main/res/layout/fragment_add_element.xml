@@ -23,11 +23,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/add_photo1_element_outline"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/type_of_element_1_outline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageview_add_property">
 
@@ -36,9 +36,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/corner_spinner"
-                android:ems="10"
+                android:ems="9"
                 android:gravity="center_vertical"
                 android:hint="URL Photo"
+                android:inputType="textMultiLine"
+                android:lines="1"
+                android:minLines="1"
+                android:paddingLeft="10dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/type_of_element_1_outline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/add_photo1_element_outline"
+            app:layout_constraintTop_toBottomOf="@id/imageview_add_property">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/type_of_element_1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/corner_spinner"
+                android:ems="9"
+                android:gravity="center_vertical"
+                android:hint="Write the Type"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
@@ -47,11 +70,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/add_photo2_element_outline"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/type_of_element_2_outline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_photo1_element_outline">
 
@@ -60,9 +83,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/corner_spinner"
-                android:ems="10"
+                android:ems="9"
                 android:gravity="center_vertical"
                 android:hint="URL Photo"
+                android:inputType="textMultiLine"
+                android:lines="1"
+                android:minLines="1"
+                android:paddingLeft="10dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/type_of_element_2_outline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/add_photo2_element_outline"
+            app:layout_constraintTop_toBottomOf="@id/add_photo1_element_outline">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/type_of_element_2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/corner_spinner"
+                android:ems="9"
+                android:gravity="center_vertical"
+                android:hint="Write the Type"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
@@ -71,11 +117,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/add_photo3_element_outline"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/type_of_element_3_outline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_photo2_element_outline">
 
@@ -84,9 +130,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/corner_spinner"
-                android:ems="10"
+                android:ems="9"
                 android:gravity="center_vertical"
                 android:hint="URL Photo"
+                android:inputType="textMultiLine"
+                android:lines="1"
+                android:minLines="1"
+                android:paddingLeft="10dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/type_of_element_3_outline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/add_photo3_element_outline"
+            app:layout_constraintTop_toBottomOf="@id/add_photo2_element_outline">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/type_of_element_3"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/corner_spinner"
+                android:ems="9"
+                android:gravity="center_vertical"
+                android:hint="Write the Type"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
@@ -95,11 +164,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/add_photo4_element_outline"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/type_of_element_4_outline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_photo3_element_outline">
 
@@ -108,9 +177,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/corner_spinner"
-                android:ems="10"
+                android:ems="9"
                 android:gravity="center_vertical"
                 android:hint="URL Photo"
+                android:inputType="textMultiLine"
+                android:lines="1"
+                android:minLines="1"
+                android:paddingLeft="10dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/type_of_element_4_outline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/add_photo4_element_outline"
+            app:layout_constraintTop_toBottomOf="@id/add_photo3_element_outline">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/type_of_element_4"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/corner_spinner"
+                android:ems="9"
+                android:gravity="center_vertical"
+                android:hint="Write the Type"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
@@ -119,11 +211,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/add_photo5_element_outline"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/type_of_element_5_outline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_photo4_element_outline">
 
@@ -132,9 +224,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/corner_spinner"
-                android:ems="10"
+                android:ems="9"
                 android:gravity="center_vertical"
                 android:hint="URL Photo"
+                android:inputType="textMultiLine"
+                android:lines="1"
+                android:minLines="1"
+                android:paddingLeft="10dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/type_of_element_5_outline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/add_photo5_element_outline"
+            app:layout_constraintTop_toBottomOf="@id/add_photo4_element_outline">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/type_of_element_5"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/corner_spinner"
+                android:ems="9"
+                android:gravity="center_vertical"
+                android:hint="Write the Type"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
@@ -143,11 +258,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/add_photo6_element_outline"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/type_of_element_6_outline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_photo5_element_outline">
 
@@ -156,9 +271,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/corner_spinner"
-                android:ems="10"
+                android:ems="9"
                 android:gravity="center_vertical"
                 android:hint="URL Photo"
+                android:inputType="textMultiLine"
+                android:lines="1"
+                android:minLines="1"
+                android:paddingLeft="10dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/type_of_element_6_outline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/add_photo6_element_outline"
+            app:layout_constraintTop_toBottomOf="@id/add_photo5_element_outline">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/type_of_element_6"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/corner_spinner"
+                android:ems="9"
+                android:gravity="center_vertical"
+                android:hint="Write the Type"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"

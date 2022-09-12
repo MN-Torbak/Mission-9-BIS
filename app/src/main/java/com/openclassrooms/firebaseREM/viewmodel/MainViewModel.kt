@@ -10,6 +10,7 @@ import com.openclassrooms.firebaseREM.api.Manager
 import com.openclassrooms.firebaseREM.api.Repository
 import com.openclassrooms.firebaseREM.model.Agent
 import com.openclassrooms.firebaseREM.model.Property
+import java.time.LocalDate
 
 class MainViewModel : ViewModel() {
     var mManager: Manager
@@ -73,7 +74,15 @@ class MainViewModel : ViewModel() {
         numberOfBathrooms: Int,
         numberOfBedrooms: Int,
         city: String,
-        address: String
+        address: String,
+        createDate: String,
+        saleDate: String,
+        closeToShops: Boolean,
+        closeToSchools: Boolean,
+        closeToParc: Boolean,
+        agentWhoAdd: String,
+        agentWhoSells: String,
+        numberOfPhotos: Int
     ): Task<DocumentReference?>? {
         getPropertysCollection(object : Repository.PropertysListener {
             override fun onPropertysSuccess(propertys: List<Property?>?) {
@@ -90,12 +99,20 @@ class MainViewModel : ViewModel() {
             numberOfBathrooms,
             numberOfBedrooms,
             city,
-            address
+            address,
+            createDate,
+            saleDate,
+            closeToShops,
+            closeToSchools,
+            closeToParc,
+            agentWhoAdd,
+            agentWhoSells,
+            numberOfPhotos
         )
     }
 
-    fun createElement(photo: String, propertyId: String?, isSelected: Boolean): Task<DocumentReference?>? {
-        return mManager.createElement(photo, propertyId, isSelected)
+    fun createElement(photo: String, propertyId: String?, isSelected: Boolean, typeOfElement: String?): Task<DocumentReference?>? {
+        return mManager.createElement(photo, propertyId, isSelected, typeOfElement)
     }
 
     fun deleteElement(id: String?, onDeleted: () -> Unit) {
@@ -104,5 +121,69 @@ class MainViewModel : ViewModel() {
 
     fun updateElementSelected (id: String?, newSelected: Boolean) {
         mManager.updateElementSelected(id, newSelected)
+    }
+
+    fun updateAgentWhoSells(id: String?, newAgentWhoSells: String?): Task<Void?>? {
+        return mManager.updateAgentWhoSells(id, newAgentWhoSells)
+    }
+
+    fun updateSaleDate(saleDate: String?, newSaleDate: String?): Task<Void?>? {
+        return mManager.updateSaleDate(saleDate, newSaleDate)
+    }
+
+    fun updateType(type: String?, newType: String?): Task<Void?>? {
+        return mManager.updateType(type, newType)
+    }
+
+    fun updatePrice(price: String?, newPrice: Int?): Task<Void?>? {
+        return mManager.updatePrice(price, newPrice)
+    }
+
+    fun updatePropertyAvatar(avatar: String?, newAvatar: String?): Task<Void?>? {
+        return mManager.updatePropertyAvatar(avatar, newAvatar)
+    }
+
+    fun updateDescription(description: String?, newDescription: String?): Task<Void?>? {
+        return mManager.updateDescription(description, newDescription)
+    }
+
+    fun updateSurface(surface: String?, newSurface: Int?): Task<Void?>? {
+        return mManager.updateSurface(surface, newSurface)
+    }
+
+    fun updateCity(city: String?, newCity: String?): Task<Void?>? {
+        return mManager.updateCity(city, newCity)
+    }
+
+    fun updateAddress(city: String?, newAddress: String?): Task<Void?>? {
+        return mManager.updateAddress(city, newAddress)
+    }
+
+    fun updateCloseToParcBoolean(id: String?, newParcBoolean: Boolean?): Task<Void?>? {
+        return mManager.updateCloseToParcBoolean(id, newParcBoolean)
+    }
+
+    fun updateCloseToSchoolsBoolean(id: String?, newSchoolsBoolean: Boolean?): Task<Void?>? {
+        return mManager.updateCloseToSchoolsBoolean(id, newSchoolsBoolean)
+    }
+
+    fun updateCloseToShopsBoolean(id: String?, newShopsBoolean: Boolean?): Task<Void?>? {
+        return mManager.updateCloseToShopsBoolean(id, newShopsBoolean)
+    }
+
+    fun updateNumberOfRooms(id: String?, newNumberOfRooms: Int?): Task<Void?>? {
+        return mManager.updateNumberOfRooms(id, newNumberOfRooms)
+    }
+
+    fun updateNumberOfBedRooms(id: String?, newNumberOfBedRooms: Int?): Task<Void?>? {
+        return mManager.updateNumberOfBedRooms(id, newNumberOfBedRooms)
+    }
+
+    fun updateNumberOfBathRooms(id: String?, newNumberOfBathRooms: Int?): Task<Void?>? {
+        return mManager.updateNumberOfBathRooms(id, newNumberOfBathRooms)
+    }
+
+    fun updateNumberOfPhotos(id: String?, newNumberOfPhotos: Int?): Task<Void?>? {
+        return mManager.updateNumberOfPhotos(id, newNumberOfPhotos)
     }
 }

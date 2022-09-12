@@ -27,23 +27,51 @@
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <ImageButton
-            android:id="@+id/edit_element"
+            android:id="@+id/modify_property"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintEnd_toStartOf="@id/sold_property"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/fragmentItemDetailRecyclerView"
+            app:srcCompat="@drawable/ic_modify_property" />
+
+        <ImageButton
+            android:id="@+id/sold_property"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintEnd_toStartOf="@id/delete_element"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/fragmentItemDetailRecyclerView"
+            app:srcCompat="@drawable/ic_sold_property" />
+
+        <ImageButton
+            android:id="@+id/delete_element"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             app:layout_constraintEnd_toStartOf="@id/add_element"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/modify_element" />
+            app:layout_constraintBottom_toTopOf="@+id/fragmentItemDetailRecyclerView"
+            app:srcCompat="@drawable/delete_element" />
 
         <ImageButton
             android:id="@+id/add_element"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/fragmentItemDetailRecyclerView"
             app:srcCompat="@drawable/add_element" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -91,6 +119,7 @@
             android:id="@+id/detail_surface_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:layout_marginTop="38dp"
             app:layout_constraintStart_toEndOf="@id/surface_img"
@@ -123,6 +152,7 @@
             android:id="@+id/detail_numberofrooms_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:layout_marginTop="18dp"
             app:layout_constraintStart_toEndOf="@id/numberofrooms_img"
@@ -155,6 +185,7 @@
             android:id="@+id/detail_numberofbedrooms_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:layout_marginTop="18dp"
             app:layout_constraintStart_toEndOf="@id/numberofbedrooms_img"
@@ -187,6 +218,7 @@
             android:id="@+id/detail_numberofbathrooms_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:layout_marginTop="18dp"
             app:layout_constraintStart_toEndOf="@id/numberofbathrooms_img"
@@ -205,6 +237,39 @@
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <ImageView
+            android:id="@+id/close_to_img"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="170dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_close_to"
+            app:layout_constraintStart_toEndOf="@id/detail_surface_title"
+            app:layout_constraintTop_toBottomOf="@id/detail_description"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/detail_close_to_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="38dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/close_to_img"
+            app:layout_constraintTop_toBottomOf="@id/detail_description" />
+
+        <TextView
+            android:id="@+id/detail_close_to_commodity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/ic_launcher_background"
+            android:textAppearance="?attr/textAppearanceListItem"
+            app:layout_constraintStart_toEndOf="@id/close_to_img"
+            app:layout_constraintTop_toBottomOf="@id/detail_close_to_title" />
+
+        <ImageView
             android:id="@+id/location_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -212,17 +277,18 @@
             android:layout_marginTop="40dp"
             android:src="@drawable/ic_marker_location"
             app:layout_constraintStart_toEndOf="@id/detail_surface_title"
-            app:layout_constraintTop_toBottomOf="@id/detail_description"
+            app:layout_constraintTop_toBottomOf="@id/detail_close_to_commodity"
             tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/detail_address_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:layout_marginTop="38dp"
             app:layout_constraintStart_toEndOf="@id/location_img"
-            app:layout_constraintTop_toBottomOf="@id/detail_description"
+            app:layout_constraintTop_toBottomOf="@id/detail_close_to_commodity"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
@@ -258,6 +324,78 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             tools:context="com.googlemap.googlemap.MapsActivity"/>
+
+        <TextView
+            android:id="@+id/detail_add_by_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@+id/detail_name_of_agent"
+            app:layout_constraintBottom_toTopOf="@+id/detail_sold_by_title" />
+
+        <TextView
+            android:id="@+id/detail_name_of_agent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@+id/detail_create_date"
+            app:layout_constraintBottom_toTopOf="@+id/detail_sold_by_title" />
+
+        <TextView
+            android:id="@+id/detail_create_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/detail_sold_by_title" />
+
+        <TextView
+            android:id="@+id/detail_sold_by_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@+id/detail_name_of_agent_who_sold"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/detail_name_of_agent_who_sold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@+id/detail_sale_date"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/detail_sale_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

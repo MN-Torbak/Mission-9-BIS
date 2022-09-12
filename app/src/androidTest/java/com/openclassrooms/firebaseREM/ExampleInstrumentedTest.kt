@@ -23,6 +23,10 @@ class ExampleInstrumentedTest {
         Assert.assertEquals("com.openclassrooms.go4lunch", appContext.packageName)
     }
 
-
-
+    @Test
+    @Throws(Exception::class)
+    fun checkWifi() {
+        val appContext = InstrumentationRegistry.getInstrumentation().context
+        Assert.assertEquals(Utils.checkForInternet(appContext), true)
+    }
 }

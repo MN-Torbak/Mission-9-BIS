@@ -23,11 +23,15 @@ import com.bumptech.glide.Glide
 import com.google.android.material.slider.RangeSlider
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.openclassrooms.firebaseREM.api.Repository
 import com.openclassrooms.firebaseREM.model.Property
 import com.openclassrooms.firebaseREM.viewmodel.MainViewModel
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.time.*
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class ItemListActivity : AppCompatActivity() {
@@ -39,6 +43,7 @@ class ItemListActivity : AppCompatActivity() {
     lateinit var checkBoxRecentlyPutOnTheMarket: CheckBox
     lateinit var checkBoxCloseToSchool: CheckBox
     lateinit var checkBoxCloseToShops: CheckBox
+    lateinit var checkBoxCloseToParc: CheckBox
     lateinit var checkBoxNumbersOfPhotos: CheckBox
     lateinit var checkBoxSurface: CheckBox
     lateinit var checkBoxPrice: CheckBox
@@ -47,6 +52,7 @@ class ItemListActivity : AppCompatActivity() {
     lateinit var rangeSliderPrice: RangeSlider
     lateinit var rangeSliderSurface: RangeSlider
     lateinit var buttonCancel: Button
+    lateinit var buttonSubmit: Button
     lateinit var adapter: SimpleItemRecyclerViewAdapter
 
 
@@ -89,12 +95,18 @@ class ItemListActivity : AppCompatActivity() {
             checkBoxRecentlyPutOnTheMarket = dialog.findViewById(R.id.checkBox_new)
             checkBoxCloseToSchool = dialog.findViewById(R.id.checkBox_close_to_school)
             checkBoxCloseToShops = dialog.findViewById(R.id.checkBox_close_to_shops)
+            checkBoxCloseToParc = dialog.findViewById(R.id.checkBox_close_to_parc)
             checkBoxNumbersOfPhotos = dialog.findViewById(R.id.checkBox_photo)
             checkBoxSurface = dialog.findViewById(R.id.checkBox_surface)
             checkBoxPrice = dialog.findViewById(R.id.checkBox_price)
             numberOfMonths = dialog.findViewById(R.id.month_spinner_dialog)
             buttonCancel = dialog.findViewById(R.id.cancel)
             buttonCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+            buttonSubmit = dialog.findViewById(R.id.submit)
+            buttonSubmit.setOnClickListener {
+                showFilteredList(propertyList)
                 dialog.dismiss()
             }
             val adapterForMonths = this.let {
@@ -138,7 +150,6 @@ class ItemListActivity : AppCompatActivity() {
 
         mMainViewModel?.Propertys?.observe(this) {
             if (it != null) {
-                propertyList.addAll(it)
                 propertyList.addAll(it)
                 for (Property in it) {
                     propertyListAddress.add(Property?.address.toString())
@@ -184,6 +195,14 @@ class ItemListActivity : AppCompatActivity() {
             holder.typeView.text = item?.type
             holder.cityView.text = item?.city
             holder.priceView.text = item?.price.toString() + " €"
+            if (item?.saleDate == "") {
+                holder.freeOrSaleView.text = "Available"
+                holder.freeOrSaleView.setTextColor(Color.parseColor("#32CD32"))
+            } else {
+                holder.freeOrSaleView.text = "Sold"
+                holder.freeOrSaleView.setTextColor(Color.parseColor("#ff2d49"))
+            }
+            holder.freeOrSaleView
             holder.itemView.setBackgroundColor(
                 if (position == selected) {
                     Color.parseColor("#C6E5F3")
@@ -228,6 +247,7 @@ class ItemListActivity : AppCompatActivity() {
             val typeView: TextView = view.findViewById(R.id.type_property)
             val cityView: TextView = view.findViewById(R.id.city_property)
             val priceView: TextView = view.findViewById(R.id.price_property)
+            val freeOrSaleView: TextView = view.findViewById(R.id.free_or_sale_property)
         }
     }
 
@@ -322,22 +342,64 @@ class ItemListActivity : AppCompatActivity() {
         // [END rtdb_enable_persistence]
     }
 
-    fun showFilteredList(primaryList: MutableList<Property?>){
+   fun showFilteredList(primaryList: MutableList<Property?>){
         val filteredList: MutableList<Property?> = ArrayList()
         for (property in primaryList) {
-            if ((checkBoxSold.isChecked && property.saleDate <= numberOfMonths.selectedItem) &&
-                (checkBoxRecentlyPutOnTheMarket.isChecked && property.createDate <= 31) &&
-                (checkBoxCloseToSchool.isChecked && property.nearbyPointsOfInterest.contains("School")) &&
-                (checkBoxCloseToShops.isChecked && property.nearbyPointsOfInterest.contains("Shops") ) &&
-                (checkBoxNumbersOfPhotos.isChecked && /*TODO: faire une methode pour savoir combien d'Element possède une Property*/ 2 >= numberOfPhotos.selectedItem.toString().toInt()) &&
-                (checkBoxSurface.isChecked && ((property?.surface!! >= rangeSliderSurface.values.minOrNull()!!) && (property.surface <= rangeSliderSurface.values.maxOrNull()!!))) &&
-                (checkBoxPrice.isChecked && ((property.price >= rangeSliderPrice.values.minOrNull()!!) && (property.price <= rangeSliderPrice.values.maxOrNull()!!)))
-                    ) {
+            val isSoldForManyMonth = ((checkBoxSold.isChecked && (monthsBetweenTwoDates(getReadableDate(), property?.saleDate)) <= numberOfMonths.selectedItem.toString().toInt()) || (!checkBoxSold.isChecked))
+            val isRecentlyPutOnTheMarket = ((checkBoxRecentlyPutOnTheMarket.isChecked && (isMoreThanaMonthsBetweenTwoDates(getReadableDate(), property?.createDate) == false)) || (!checkBoxRecentlyPutOnTheMarket.isChecked))
+            val isCloseToShops = ((checkBoxCloseToShops.isChecked && (property?.closeToShops == true)) || (!checkBoxCloseToShops.isChecked))
+            val isCloseToSchool = ((checkBoxCloseToSchool.isChecked && (property?.closeToSchools == true) ) || (!checkBoxCloseToSchool.isChecked))
+            val isCloseToParc = ((checkBoxCloseToParc.isChecked && (property?.closeToParc == true) ) || (!checkBoxCloseToParc.isChecked))
+            val enoughNumberOfPhotos = ((checkBoxNumbersOfPhotos.isChecked && property?.numberOfPhotos!! >= numberOfPhotos.selectedItem.toString().toInt()) || (!checkBoxNumbersOfPhotos.isChecked))
+            val surfaceSize = ((checkBoxSurface.isChecked && ((property?.surface!! >= rangeSliderSurface.values.minOrNull()!!) && (property.surface <= rangeSliderSurface.values.maxOrNull()!!))) || (!checkBoxSurface.isChecked))
+            val price = ((checkBoxPrice.isChecked && ((property?.price!! >= rangeSliderPrice.values.minOrNull()!!) && (property.price <= rangeSliderPrice.values.maxOrNull()!!))) || (!checkBoxPrice.isChecked))
+            if (
+                isSoldForManyMonth &&
+                isRecentlyPutOnTheMarket &&
+                isCloseToShops &&
+                isCloseToSchool &&
+                isCloseToParc &&
+                enoughNumberOfPhotos &&
+                surfaceSize &&
+                price
+            ){
                 filteredList.add(property)
             }
         }
-        adapter.updateList(filteredList)
-        adapter.notifyDataSetChanged()
+       val currentAdapter = recyclerView.adapter as SimpleItemRecyclerViewAdapter
+       currentAdapter.updateList(filteredList)
+       currentAdapter.notifyDataSetChanged()
     }
+
+    fun monthsBetweenTwoDates (todayDate: String?, originalDate: String?): Int {
+        if (originalDate == "") {
+            return 25
+        } else {
+            val df = DateTimeFormatter.ofPattern("dd/M/yyyy")
+            val d1 = LocalDate.parse(todayDate, df)
+            val d2 = LocalDate.parse(originalDate, df)
+            val datediff: Long = ChronoUnit.MONTHS.between(d1, d2)
+            return datediff.toInt()
+        }
+    }
+
+    fun isMoreThanaMonthsBetweenTwoDates (todayDate: String?, originalDate: String?): Boolean {
+        val df = DateTimeFormatter.ofPattern("dd/M/yyyy")
+        val d1 = LocalDate.parse(todayDate, df)
+        val d2 = LocalDate.parse(originalDate, df)
+        val datediff: Long = ChronoUnit.DAYS.between(d1, d2)
+        if (datediff < 31) {
+            return true
+        } else {
+               return false
+        }
+    }
+
+    private fun getReadableDate(): String? {
+        val now = Date()
+        val formatter = SimpleDateFormat("dd/MM/YYYY", Locale.getDefault())
+        return formatter.format(now)
+    }
+
 
 }

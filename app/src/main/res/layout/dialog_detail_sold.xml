@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/real_estate_salesman_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:padding="7dp"
+        android:text="Real Estate Salesman: "
+        android:textColor="@color/colorBlack"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/real_estate_salesman_outline"
+        app:layout_constraintTop_toBottomOf="@id/datePickerSaleDate" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/real_estate_salesman_outline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toBottomOf="@id/datePickerSaleDate"
+        app:layout_constraintStart_toEndOf="@+id/real_estate_salesman_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/real_estate_salesman"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:ems="10"
+            android:hint="Name of Agent"
+            android:paddingLeft="8dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/corner_spinner"
+            android:inputType="textMultiLine"
+            android:lines="1"
+            android:minLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tewtview_saleDate"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:text="Sale Day"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <DatePicker
+        android:id="@+id/datePickerSaleDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tewtview_saleDate"/>
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/corner_spinner"
+        android:enabled="true"
+        android:text="Cancel"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/submit"
+        app:layout_constraintTop_toBottomOf="@id/real_estate_salesman_outline" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/corner_spinner"
+        android:enabled="true"
+        android:text="Submit"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/real_estate_salesman_outline" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

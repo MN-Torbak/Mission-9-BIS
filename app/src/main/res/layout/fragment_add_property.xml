@@ -7,30 +7,68 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@drawable/fond"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageview_fond"
-            android:layout_width="1100dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/fond"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
             android:id="@+id/imageview_add_property"
-            android:layout_width="200dp"
-            android:layout_height="100dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginTop="10dp"
             app:srcCompat="@drawable/add_imageview"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/datePickerCreateDate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_name_of_agent_outline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageview_add_property">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/add_name_of_agent"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:ems="10"
+                android:hint="Name of Agent"
+                android:paddingLeft="8dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/corner_spinner"
+                android:inputType="textMultiLine"
+                android:lines="1"
+                android:minLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tewtview_createDate"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:text="Creation Day"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toEndOf="@+id/imageview_add_property"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <DatePicker
+            android:id="@+id/datePickerCreateDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"
+            app:layout_constraintStart_toEndOf="@+id/imageview_add_property"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tewtview_createDate"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/add_type_property_outline"
@@ -40,7 +78,7 @@
             android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageview_add_property">
+            app:layout_constraintTop_toBottomOf="@id/datePickerCreateDate">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/add_type_property"
@@ -71,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"
-                android:hint="URL de la photo"
+                android:hint="Photo's URL"
                 android:paddingLeft="10dp"
                 android:gravity="center_vertical"
                 android:background="@drawable/corner_spinner"
@@ -113,11 +151,11 @@
             android:text="Number of Rooms: "
             android:textSize="20sp"
             android:textStyle="bold"
-            android:fontFamily="sans-serif-thin"
+            android:fontFamily="sans-serif"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_address_property_outline" />
+            app:layout_constraintTop_toBottomOf="@+id/add_price_property_outline" />
 
         <Spinner
             android:id="@+id/add_numberOfRooms_property"
@@ -131,7 +169,7 @@
             android:paddingLeft="6dp"
             android:spinnerMode="dropdown"
             app:layout_constraintStart_toEndOf="@id/tewtview_Rooms"
-            app:layout_constraintTop_toBottomOf="@id/add_address_property_outline" />
+            app:layout_constraintTop_toBottomOf="@+id/add_price_property_outline" />
 
         <TextView
             android:id="@+id/tewtview_BathRooms"
@@ -142,7 +180,7 @@
             android:text="Number of BathRooms: "
             android:textSize="20dp"
             android:textStyle="bold"
-            android:fontFamily="sans-serif-thin"
+            android:fontFamily="sans-serif"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -171,7 +209,7 @@
             android:text="Number of BedRooms: "
             android:textSize="20dp"
             android:textStyle="bold"
-            android:fontFamily="sans-serif-thin"
+            android:fontFamily="sans-serif"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -195,9 +233,10 @@
             android:id="@+id/add_city_property_outline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="4dp"
+            app:layout_constraintEnd_toStartOf="@id/checkBox_shops"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_numberOfBedrooms_property">
+            app:layout_constraintTop_toBottomOf="@+id/add_address_property_outline">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/add_city_property"
@@ -217,7 +256,8 @@
             android:id="@+id/add_surface_property_outline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="4dp"
+            app:layout_constraintEnd_toStartOf="@id/checkBox_schools"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_city_property_outline">
 
@@ -239,8 +279,9 @@
             android:id="@+id/add_price_property_outline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/checkBox_parc"
             app:layout_constraintTop_toBottomOf="@id/add_surface_property_outline">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -281,20 +322,63 @@
                 android:minLines="4" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <CheckBox
+            android:id="@+id/checkBox_shops"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:padding="7dp"
+            android:text="Close to Shops"
+            android:textSize="18sp"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            app:layout_constraintStart_toEndOf="@+id/add_city_property_outline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_address_property_outline" />
+
+        <CheckBox
+            android:id="@+id/checkBox_schools"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:padding="7dp"
+            android:text="Close to Schools"
+            android:textSize="18sp"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            app:layout_constraintStart_toEndOf="@+id/add_surface_property_outline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_city_property_outline" />
+
+        <CheckBox
+            android:id="@+id/checkBox_parc"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:padding="7dp"
+            android:text="Close to Parc"
+            android:textSize="18sp"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            app:layout_constraintStart_toEndOf="@+id/add_price_property_outline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_surface_property_outline" />
+
         <Button
             android:id="@+id/create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
             android:enabled="true"
             android:text="Save"
             android:background="@drawable/corner_spinner"
             app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_price_property_outline" />
-
+            app:layout_constraintTop_toBottomOf="@+id/add_numberOfBedrooms_property"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

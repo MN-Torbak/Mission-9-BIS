@@ -1,6 +1,7 @@
 package com.openclassrooms.firebaseREM
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -9,8 +10,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
+import android.view.Window
+import android.widget.*
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -28,6 +29,7 @@ import com.openclassrooms.firebaseREM.api.Repository
 import com.openclassrooms.firebaseREM.model.Property
 import com.openclassrooms.firebaseREM.viewmodel.MainViewModel
 import java.io.IOException
+import java.text.NumberFormat
 import java.util.*
 
 
@@ -46,9 +48,15 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
     var mMainViewModel: MainViewModel? = null
     private var mMap: GoogleMap? = null
     private var itemLatLng: LatLng? = null
+    private lateinit var closeToCommodity: String
     private lateinit var itemDetailAdapter: ItemDetailAdapter
+    lateinit var buttonCancel: Button
+    lateinit var buttonSubmit: Button
+    lateinit var datePickerSaleDate: DatePicker
+    lateinit var nameOfSalesman: TextView
 
 
+    @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mMainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
@@ -79,6 +87,46 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
                                     item?.address
                                 activity?.findViewById<TextView>(R.id.detail_city)?.text =
                                     item?.city
+                                if (item?.closeToShops == true && item?.closeToSchools == false && item?.closeToParc == false) {
+                                    closeToCommodity = "Shops"
+                                } else if (item?.closeToShops == false && item?.closeToSchools == true && item?.closeToSchools == false) {
+                                    closeToCommodity = "Schools"
+                                } else if (item?.closeToShops == false && item?.closeToSchools == false && item?.closeToParc == true) {
+                                    closeToCommodity = "Parc"
+                                } else if (item?.closeToShops == true && item?.closeToSchools == true && item?.closeToParc == false) {
+                                    closeToCommodity = "Shops and Schools"
+                                } else if (item?.closeToShops == true && item?.closeToSchools == false && item?.closeToParc == true) {
+                                    closeToCommodity = "Shops and Parc"
+                                } else if (item?.closeToShops == false && item?.closeToSchools == true && item?.closeToParc == true) {
+                                    closeToCommodity = "Schools and Parc"
+                                } else if (item?.closeToShops == true && item?.closeToSchools == true && item?.closeToParc == true) {
+                                    closeToCommodity = "Shops, Schools and Parc"
+                                } else {
+                                    activity?.findViewById<TextView>(R.id.detail_close_to_commodity)?.visibility =
+                                        View.GONE
+                                }
+                                activity?.findViewById<TextView>(R.id.detail_close_to_commodity)?.text =
+                                    closeToCommodity
+                                activity?.findViewById<TextView>(R.id.detail_address)?.text = item?.address
+                                activity?.findViewById<TextView>(R.id.detail_city)?.text = item?.city
+                                activity?.findViewById<TextView>(R.id.detail_add_by_title)?.text = "Added by "
+                                activity?.findViewById<TextView>(R.id.detail_name_of_agent)?.text =
+                                    item?.agentWhoAdd + ", "
+                                activity?.findViewById<TextView>(R.id.detail_create_date)?.text =
+                                    item?.createDate
+                                if (item?.saleDate == "") {
+                                    activity?.findViewById<TextView>(R.id.detail_sold_by_title)?.visibility =
+                                        View.GONE
+                                    activity?.findViewById<TextView>(R.id.detail_name_of_agent_who_sold)?.visibility =
+                                        View.GONE
+                                    activity?.findViewById<TextView>(R.id.detail_sale_date)?.visibility = View.GONE
+                                } else {
+                                    activity?.findViewById<TextView>(R.id.detail_sold_by_title)?.text = "Sold by "
+                                    activity?.findViewById<TextView>(R.id.detail_name_of_agent_who_sold)?.text =
+                                        item?.agentWhoSells + ", "
+                                    activity?.findViewById<TextView>(R.id.detail_sale_date)?.text =
+                                        item?.saleDate
+                                }
                             }
                         }
                     }
@@ -87,6 +135,7 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    @SuppressLint("CutPasteId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -104,6 +153,37 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
             deleteElement(item?.let { createPhotoListElement(it, itemDetailAdapter.mElement) })
         }
 
+        activity?.findViewById<ImageButton>(R.id.modify_property)?.setOnClickListener {
+            modifyProperty()
+        }
+
+        activity?.findViewById<ImageButton>(R.id.sold_property)?.setOnClickListener {
+            val dialog = context?.let { it1 -> Dialog(it1) }
+            if (dialog != null) {
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCancelable(false)
+                dialog.setContentView(R.layout.dialog_detail_sold)
+                datePickerSaleDate = dialog.findViewById(R.id.datePickerSaleDate)
+                nameOfSalesman = dialog.findViewById(R.id.real_estate_salesman)
+                buttonCancel = dialog.findViewById(R.id.cancel)
+                buttonCancel.setOnClickListener {
+                    dialog.dismiss()
+                }
+                buttonSubmit = dialog.findViewById(R.id.submit)
+                buttonSubmit.setOnClickListener {
+                    mMainViewModel?.updateAgentWhoSells(item?.id, nameOfSalesman.text.toString())
+                    mMainViewModel?.updateSaleDate(item?.id, "" + datePickerSaleDate.getDayOfMonth() + "/" + (datePickerSaleDate.getMonth()+1) + "/" + datePickerSaleDate.getYear())
+                    dialog.dismiss()
+                    rootView.findViewById<TextView>(R.id.detail_sold_by_title).text = "Sold by "
+                    rootView.findViewById<TextView>(R.id.detail_name_of_agent_who_sold).text =
+                        nameOfSalesman.text.toString() + ", "
+                    rootView.findViewById<TextView>(R.id.detail_sale_date).text =
+                        "" + datePickerSaleDate.getDayOfMonth() + "/" + (datePickerSaleDate.getMonth()+1) + "/" + datePickerSaleDate.getYear()
+                }
+                dialog.show()
+            }
+        }
+
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.detail_map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
@@ -118,20 +198,97 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
                 "Number of bathrooms"
             rootView.findViewById<TextView>(R.id.detail_numberofbedrooms_title).text =
                 "Number of bedrooms"
+            rootView.findViewById<TextView>(R.id.detail_close_to_title).text =
+                "Close to: "
             rootView.findViewById<TextView>(R.id.detail_address_title).text = "Location"
             if (currentItem != null) {
                 rootView.findViewById<TextView>(R.id.detail_description).text =
                     currentItem.description
                 rootView.findViewById<TextView>(R.id.detail_surface).text =
-                    currentItem.surface.toString()
+                    currentItem.surface.toString() + " m²"
                 rootView.findViewById<TextView>(R.id.detail_numberofrooms).text =
                     currentItem.numberOfRooms.toString()
                 rootView.findViewById<TextView>(R.id.detail_numberofbathrooms).text =
                     currentItem.numberOfBathrooms.toString()
                 rootView.findViewById<TextView>(R.id.detail_numberofbedrooms).text =
                     currentItem.numberOfBedrooms.toString()
+                if (currentItem.closeToShops == true && currentItem.closeToSchools == false && currentItem.closeToParc == false) {
+                    closeToCommodity = "Shops"
+                } else if (currentItem.closeToShops == false && currentItem.closeToSchools == true && currentItem.closeToSchools == false) {
+                    closeToCommodity = "Schools"
+                } else if (currentItem.closeToShops == false && currentItem.closeToSchools == false && currentItem.closeToParc == true) {
+                    closeToCommodity = "Parc"
+                } else if (currentItem.closeToShops == true && currentItem.closeToSchools == true && currentItem.closeToParc == false) {
+                    closeToCommodity = "Shops and Schools"
+                } else if (currentItem.closeToShops == true && currentItem.closeToSchools == false && currentItem.closeToParc == true) {
+                    closeToCommodity = "Shops and Parc"
+                } else if (currentItem.closeToShops == false && currentItem.closeToSchools == true && currentItem.closeToParc == true) {
+                    closeToCommodity = "Schools and Parc"
+                } else if (currentItem.closeToShops == true && currentItem.closeToSchools == true && currentItem.closeToParc == true) {
+                    closeToCommodity = "Shops, Schools and Parc"
+                } else {
+                    rootView.findViewById<TextView>(R.id.detail_close_to_commodity).visibility =
+                        View.GONE
+                }
+                rootView.findViewById<TextView>(R.id.detail_close_to_commodity).text =
+                    closeToCommodity
                 rootView.findViewById<TextView>(R.id.detail_address).text = currentItem.address
                 rootView.findViewById<TextView>(R.id.detail_city).text = currentItem.city
+                rootView.findViewById<TextView>(R.id.detail_add_by_title).text = "Added by "
+                rootView.findViewById<TextView>(R.id.detail_name_of_agent).text =
+                    currentItem.agentWhoAdd + ", "
+                rootView.findViewById<TextView>(R.id.detail_create_date).text =
+                    currentItem.createDate
+                if (currentItem.saleDate == "") {
+                    rootView.findViewById<TextView>(R.id.detail_sold_by_title).visibility =
+                        View.GONE
+                    rootView.findViewById<TextView>(R.id.detail_name_of_agent_who_sold).visibility =
+                        View.GONE
+                    rootView.findViewById<TextView>(R.id.detail_sale_date).visibility = View.GONE
+                } else {
+                    rootView.findViewById<TextView>(R.id.detail_sold_by_title).text = "Sold by "
+                    rootView.findViewById<TextView>(R.id.detail_name_of_agent_who_sold).text =
+                        currentItem.agentWhoSells + ", "
+                    rootView.findViewById<TextView>(R.id.detail_sale_date).text =
+                        currentItem.saleDate
+                }
+                rootView.findViewById<ImageButton>(R.id.modify_property)?.setOnClickListener {
+                    modifyProperty()
+                }
+
+                rootView.findViewById<ImageButton>(R.id.sold_property)?.setOnClickListener {
+                    val dialog = context?.let { it1 -> Dialog(it1) }
+                    if (dialog != null) {
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                        dialog.setCancelable(false)
+                        dialog.setContentView(R.layout.dialog_detail_sold)
+                        datePickerSaleDate = dialog.findViewById(R.id.datePickerSaleDate)
+                        nameOfSalesman = dialog.findViewById(R.id.real_estate_salesman)
+                        buttonCancel = dialog.findViewById(R.id.cancel)
+                        buttonCancel.setOnClickListener {
+                            dialog.dismiss()
+                        }
+                        buttonSubmit = dialog.findViewById(R.id.submit)
+                        buttonSubmit.setOnClickListener {
+                            mMainViewModel?.updateAgentWhoSells(item?.id, nameOfSalesman.text.toString())
+                            mMainViewModel?.updateSaleDate(item?.id, "" + datePickerSaleDate.getDayOfMonth() + "/" + (datePickerSaleDate.getMonth()+1) + "/" + datePickerSaleDate.getYear())
+                            dialog.dismiss()
+                            rootView.findViewById<TextView>(R.id.detail_sold_by_title).text = "Sold by "
+                            rootView.findViewById<TextView>(R.id.detail_name_of_agent_who_sold).text =
+                                nameOfSalesman.text.toString() + ", "
+                            rootView.findViewById<TextView>(R.id.detail_sale_date).text =
+                                "" + datePickerSaleDate.getDayOfMonth() + "/" + (datePickerSaleDate.getMonth()+1) + "/" + datePickerSaleDate.getYear()
+                        }
+                        dialog.show()
+                    }
+                }
+                rootView.findViewById<ImageButton>(R.id.add_element)?.setOnClickListener {
+                    addElement()
+                }
+
+                rootView.findViewById<ImageButton>(R.id.delete_element)?.setOnClickListener {
+                    deleteElement(item?.let { createPhotoListElement(it, itemDetailAdapter.mElement) })
+                }
             }
         }
 
@@ -163,7 +320,7 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
     private fun createPhotoListElement(
         property: Property,
         ElementList: List<Element?>?
-    ): ArrayList<Element>? {
+    ): ArrayList<Element> {
         val mPhotoElement = ArrayList<Element>()
 
         if (ElementList != null) {
@@ -191,18 +348,43 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
                 .commit()
         } else {
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frameLayoutDetail, fragment).addToBackStack(this.toString())
+                .replace(R.id.item_detail_container, fragment).addToBackStack(this.toString())
+                .commit()
+        }
+    }
+
+    private fun modifyProperty() {
+        val fragment = ModifyPropertyFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable(ARG_ITEM_ID, item)
+            }
+        }
+
+        if (twoPane) {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frameLayoutDetail, fragment)
+                .commit()
+        } else {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.item_detail_container, fragment).addToBackStack(this.toString())
                 .commit()
         }
     }
 
     fun deleteElement(elementList: ArrayList<Element>?) {
+        var intChangeNumberOfPhotos = 0
         if (elementList != null) {
             for (element in elementList) {
                 if (element.isSelected == true) {
                     mMainViewModel?.deleteElement(element.elementId, onElementDeleted)
+                    intChangeNumberOfPhotos += 1
                 }
             }
+        }
+        var updatingNumberOfPhotos = item?.numberOfPhotos?.minus(intChangeNumberOfPhotos)
+        mMainViewModel?.updateNumberOfPhotos(item?.id, (updatingNumberOfPhotos))
+        if (updatingNumberOfPhotos != null) {
+            item?.numberOfPhotos = updatingNumberOfPhotos
         }
     }
 

@@ -13,7 +13,7 @@ import com.openclassrooms.firebaseREM.Element
 import com.openclassrooms.firebaseREM.model.Agent
 import com.openclassrooms.firebaseREM.model.Property
 
-class Repository () {
+class Repository() {
 
     private val COLLECTION_USER = "users"
     private val COLLECTION_PROPERTY = "propertys"
@@ -30,7 +30,8 @@ class Repository () {
     fun getCurrentUser(): Agent {
         FirebaseAuth.getInstance().currentUser
         val currentUser = FirebaseAuth.getInstance().currentUser
-        val agent: Agent = Agent(currentUser?.uid, currentUser?.displayName, currentUser?.photoUrl.toString())
+        val agent: Agent =
+            Agent(currentUser?.uid, currentUser?.displayName, currentUser?.photoUrl.toString())
         return agent
     }
 
@@ -64,10 +65,11 @@ class Repository () {
     }
 
     fun getUser(id: String?, listener: OnUserSuccessListener) {
-        val task = this.getUsersCollection().document(id!!).get().addOnSuccessListener { documentSnapshot ->
-            val currentAgent: Agent? = documentSnapshot.toObject<Agent>(Agent::class.java)
-            listener.onUserSuccess(currentAgent)
-        }
+        val task = this.getUsersCollection().document(id!!).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val currentAgent: Agent? = documentSnapshot.toObject<Agent>(Agent::class.java)
+                listener.onUserSuccess(currentAgent)
+            }
     }
 
     interface AgentsListener {
@@ -94,6 +96,70 @@ class Repository () {
 
     fun updatePropertyId(id: String?, newId: String?): Task<Void?> {
         return getPropertysCollection().document(id.toString()).update("id", newId)
+    }
+
+    fun updateAgentWhoSells(id: String?, newAgentWhoSells: String?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("agentWhoSells", newAgentWhoSells)
+    }
+
+    fun updateSaleDate(id: String?, newSaleDate: String?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("saleDate", newSaleDate)
+    }
+
+    fun updateType(id: String?, newType: String?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("type", newType)
+    }
+
+    fun updatePrice(id: String?, newPrice: Int?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("price", newPrice)
+    }
+
+    fun updatePropertyAvatar(id: String?, newAvatar: String?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("avatar1", newAvatar)
+    }
+
+    fun updateDescription(id: String?, newDescription: String?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("description", newDescription)
+    }
+
+    fun updateSurface(id: String?, newSurface: Int?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("surface", newSurface)
+    }
+
+    fun updateCity(id: String?, newCity: String?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("city", newCity)
+    }
+
+    fun updateAddress(id: String?, newAddress: String?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("address", newAddress)
+    }
+
+    fun updateCloseToParcBoolean(id: String?, newParcBoolean: Boolean?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("closeToParc", newParcBoolean)
+    }
+
+    fun updateCloseToSchoolsBoolean(id: String?, newSchoolsBoolean: Boolean?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("closeToSchools", newSchoolsBoolean)
+    }
+
+    fun updateCloseToShopsBoolean(id: String?, newShopsBoolean: Boolean?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("closeToShops", newShopsBoolean)
+    }
+
+    fun updateNumberOfRooms(id: String?, newNumberOfRooms: Int?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("numberOfRooms", newNumberOfRooms)
+    }
+
+    fun updateNumberOfBedRooms(id: String?, newNumberOfBedRooms: Int?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("numberOfBedrooms", newNumberOfBedRooms)
+    }
+
+    fun updateNumberOfBathRooms(id: String?, newNumberOfBathRooms: Int?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("numberOfBathrooms", newNumberOfBathRooms)
+    }
+
+    fun updateNumberOfPhotos(id: String?, newNumberOfPhotos: Int?): Task<Void?> {
+        return getPropertysCollection().document(id.toString()).update("numberOfPhotos", newNumberOfPhotos)
     }
 
     fun updateElementId(id: String?, newId: String?): Task<Void?> {
@@ -125,7 +191,7 @@ class Repository () {
         val propertys: MutableList<Property> = ArrayList<Property>()
         for (document in task.result) {
             val property: Property = document.toObject(Property::class.java)
-            if (property.id != document.id ) {
+            if (property.id != document.id) {
                 property.id = document.id
                 updatePropertyId(document.id, document.id)
             }
@@ -134,10 +200,50 @@ class Repository () {
         return propertys
     }
 
-    interface PropertysListener { fun onPropertysSuccess(propertys: List<Property?>?) }
+    interface PropertysListener {
+        fun onPropertysSuccess(propertys: List<Property?>?)
+    }
 
-    fun createProperty(type: String, price: Int, avatar1: String, description: String, surface: Int, numberOfRooms: Int, numberOfBathrooms: Int, numberOfBedrooms: Int, city: String, address: String): Task<DocumentReference?> {
-        val propertyToCreate = Property(type, price, avatar1, description, surface, numberOfRooms, numberOfBathrooms, numberOfBedrooms, city, address)
+    fun createProperty(
+        type: String,
+        price: Int,
+        avatar1: String,
+        description: String,
+        surface: Int,
+        numberOfRooms: Int,
+        numberOfBathrooms: Int,
+        numberOfBedrooms: Int,
+        city: String,
+        address: String,
+        createDate: String,
+        saleDate: String,
+        closeToShops: Boolean,
+        closeToSchools: Boolean,
+        closeToParc: Boolean,
+        agentWhoAdd: String,
+        agentWhoSells: String,
+        numberOfPhotos: Int,
+    ): Task<DocumentReference?> {
+        val propertyToCreate = Property(
+            type,
+            price,
+            avatar1,
+            description,
+            surface,
+            numberOfRooms,
+            numberOfBathrooms,
+            numberOfBedrooms,
+            city,
+            address,
+            createDate,
+            saleDate,
+            closeToShops,
+            closeToSchools,
+            closeToParc,
+            agentWhoAdd,
+            agentWhoSells,
+            numberOfPhotos
+        )
         return getPropertysCollection().add(propertyToCreate)
     }
 
@@ -165,7 +271,7 @@ class Repository () {
         val elements: MutableList<Element> = ArrayList<Element>()
         for (document in task.result) {
             val element: Element = document.toObject(Element::class.java)
-            if (element.elementId != document.id ) {
+            if (element.elementId != document.id) {
                 element.elementId = document.id
                 updateElementId(document.id, document.id)
             }
@@ -174,22 +280,28 @@ class Repository () {
         return elements
     }
 
-    fun createElement(photo: String, propertyId: String?, isSelected: Boolean): Task<DocumentReference?> {
-        val elementToCreate = Element(photo, propertyId, isSelected)
+    fun createElement(
+        photo: String,
+        propertyId: String?,
+        isSelected: Boolean,
+        typeOfElement: String?
+    ): Task<DocumentReference?> {
+        val elementToCreate = Element(photo = photo, propertyId = propertyId, isSelected = isSelected, typeOfElement = typeOfElement)
         return getElementsCollection().add(elementToCreate)
     }
 
     fun deleteElement(id: String?, onDeleted: () -> Unit) {
         if (id != null) {
             getElementsCollection().document(id).delete()
-                .addOnCompleteListener{
+                .addOnCompleteListener {
                     onDeleted()
                 }
-                .addOnFailureListener {onDeleted() /*TODO: chercher dans la bdd room*/}
+                .addOnFailureListener { onDeleted() }
         }
     }
 
-    interface ElementsListener { fun onElementsSuccess(elements: List<Element?>?) }
-
+    interface ElementsListener {
+        fun onElementsSuccess(elements: List<Element?>?)
+    }
 
 }

@@ -32,4 +32,15 @@ class ExampleUnitTest {
         Assert.assertEquals("22/06/2022", todayDateFrenchFormat)
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun whenDateisEmptyReturn25Test() {
+        Assert.assertEquals(Utils.monthsBetweenTwoDates("22/7/2022", ""), 25)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun whenDateisEmptyReturn24Test() {
+        Assert.assertEquals(Utils.monthsBetweenTwoDates("22/7/2024", "22/7/2022"), 24)
+    }
 }

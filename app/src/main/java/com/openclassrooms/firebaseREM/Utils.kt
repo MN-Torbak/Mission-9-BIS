@@ -2,11 +2,18 @@ package com.openclassrooms.firebaseREM
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
+import android.os.Build
+import android.util.Log
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
+import kotlin.math.absoluteValue
 
 
 /**
@@ -55,23 +62,29 @@ object Utils {
      * @param context
      * @return
      */
-    fun isInternetAvailable(context: Context): Boolean {
-        val wifi = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        return wifi.isWifiEnabled
+
+    fun monthsBetweenTwoDates(todayDate: String?, originalDate: String?): Int {
+        if (originalDate == "") {
+            return 25
+        } else {
+            val df = DateTimeFormatter.ofPattern("dd/M/yyyy")
+            val d1 = LocalDate.parse(todayDate, df)
+            val d2 = LocalDate.parse(originalDate, df)
+            val datediff: Long = ChronoUnit.MONTHS.between(d1, d2)
+            return datediff.toInt().absoluteValue
+        }
     }
 
-    fun isWifiAvailable(context: Context): Boolean {
-        var br = false
-        var cm: ConnectivityManager? = null
-        var ni: NetworkInfo? = null
-        cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        ni = cm.activeNetworkInfo
-        br = null != ni && ni.isConnected && ni.type == ConnectivityManager.TYPE_WIFI
-        return br
-    }
+    fun checkForInternet(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
 
-    fun isPropertySoldLastMonths( monthsNumber : Int, now : Date) {
-        //TODO: doit donner le nombre de mois depuis la vente
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            else -> false
+        }
     }
-
 }
+

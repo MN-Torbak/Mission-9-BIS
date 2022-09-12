@@ -57,9 +57,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginTop="10dp"
             android:textAppearance="?attr/textAppearanceListItem"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_description_title" />
 
         <ImageView
@@ -195,6 +197,39 @@
             app:layout_constraintTop_toBottomOf="@id/detail_numberofbathrooms_title" />
 
         <ImageView
+            android:id="@+id/close_to_img"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_close_to"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_numberofbathrooms"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/detail_close_to_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="18dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/numberofbathrooms_img"
+            app:layout_constraintTop_toBottomOf="@id/detail_numberofbathrooms" />
+
+        <TextView
+            android:id="@+id/detail_close_to_commodity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/ic_launcher_background"
+            android:textAppearance="?attr/textAppearanceListItem"
+            app:layout_constraintStart_toEndOf="@id/numberofbathrooms_img"
+            app:layout_constraintTop_toBottomOf="@+id/detail_close_to_title" />
+
+        <ImageView
             android:id="@+id/location_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -202,7 +237,7 @@
             android:layout_marginTop="20dp"
             android:src="@drawable/ic_marker_location"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_numberofbathrooms"
+            app:layout_constraintTop_toBottomOf="@+id/detail_close_to_commodity"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -214,7 +249,7 @@
             android:textAppearance="?attr/textAppearanceListItem"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/location_img"
-            app:layout_constraintTop_toBottomOf="@+id/detail_numberofbathrooms" />
+            app:layout_constraintTop_toBottomOf="@+id/detail_close_to_commodity" />
 
         <TextView
             android:id="@+id/detail_address"
@@ -239,6 +274,7 @@
             app:layout_constraintTop_toBottomOf="@id/detail_address" />
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/detail_material_card_view_for_map"
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_marginTop="20dp"
@@ -259,6 +295,79 @@
                 android:layout_height="wrap_content"
                 tools:context="com.googlemap.googlemap.MapsActivity" />
         </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/detail_add_by_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@+id/detail_name_of_agent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_material_card_view_for_map" />
+
+        <TextView
+            android:id="@+id/detail_name_of_agent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@+id/detail_create_date"
+            app:layout_constraintTop_toBottomOf="@+id/detail_material_card_view_for_map" />
+
+        <TextView
+            android:id="@+id/detail_create_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_material_card_view_for_map" />
+
+        <TextView
+            android:id="@+id/detail_sold_by_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@+id/detail_name_of_agent_who_sold"
+            app:layout_constraintTop_toBottomOf="@+id/detail_add_by_title" />
+
+        <TextView
+            android:id="@+id/detail_name_of_agent_who_sold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@+id/detail_sale_date"
+            app:layout_constraintTop_toBottomOf="@+id/detail_add_by_title" />
+
+        <TextView
+            android:id="@+id/detail_sale_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_add_by_title" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

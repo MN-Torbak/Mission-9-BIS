@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -15,9 +16,11 @@ class ItemDetailAdapter(pPhotoProperty: List<Element>?) :
     class ItemDetailViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         var mImageView: ImageView
+        var mTextView: TextView
 
         init {
             mImageView = itemView.findViewById(R.id.photo_property)
+            mTextView = itemView.findViewById(R.id.type_of_element)
         }
     }
 
@@ -48,6 +51,7 @@ class ItemDetailAdapter(pPhotoProperty: List<Element>?) :
                 clicked = !clicked
             }
         }
+        holder.mTextView.text = element.typeOfElement
     }
 
     override fun getItemCount(): Int {
@@ -64,6 +68,6 @@ class ItemDetailAdapter(pPhotoProperty: List<Element>?) :
 
 }
 
-data class Element(val photo: String = "", val propertyId: String? = "", var isSelected : Boolean, var elementId: String? = "") {
-    constructor() : this("","",false,"")
+data class Element(val photo: String = "", val propertyId: String? = "", var isSelected : Boolean, var elementId: String? = "", var typeOfElement: String? = "",) {
+    constructor() : this("","",false,"", "")
 }

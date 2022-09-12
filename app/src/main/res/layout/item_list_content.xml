@@ -16,6 +16,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="ContentDescription" />
 
+    <ImageView
+        android:id="@+id/img_item_list_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/img_item_list_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/free_or_sale_property"
+        tools:ignore="ContentDescription" />
+
     <TextView
         android:id="@+id/type_property"
         android:layout_width="wrap_content"
@@ -34,6 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Paris"
+        android:textSize="17sp"
         app:layout_constraintStart_toEndOf="@id/avatar_property"
         app:layout_constraintTop_toBottomOf="@id/type_property"
         app:layout_constraintBottom_toTopOf="@id/price_property"
@@ -47,11 +60,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="300 000 €"
+        android:textStyle="bold|italic"
         android:textSize="20sp"
         android:textColor="@color/fui_bgTwitter"
         app:layout_constraintStart_toEndOf="@id/avatar_property"
         app:layout_constraintTop_toBottomOf="@id/city_property"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="10dp"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/free_or_sale_property"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="15dp"
+        android:textSize="15sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:textAppearance="?attr/textAppearanceListItem" />
 </androidx.constraintlayout.widget.ConstraintLayout>
