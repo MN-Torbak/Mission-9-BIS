@@ -1,4 +1,4 @@
-package com.openclassrooms.firebaseREM.Notifications
+package com.openclassrooms.firebaseREM.notifications
 
 import android.content.Context
 import androidx.core.app.NotificationCompat
@@ -6,15 +6,11 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.openclassrooms.firebaseREM.R
-import com.openclassrooms.firebaseREM.api.Manager
-import java.util.*
 
 class NotificationsWorker(
     context: Context,
     params: WorkerParameters
 ) : Worker(context, params) {
-
-    var mManager: Manager? = null
 
     override fun doWork(): Result {
         displayNotifications()
@@ -32,16 +28,12 @@ class NotificationsWorker(
             .setContentText("")
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                .bigText("Your property was added succesfully")
+                .bigText("Your property was added successfully")
             )
             .setPriority(NotificationCompat.PRIORITY_HIGH)
         val notificationManager = NotificationManagerCompat.from(
             applicationContext
         )
         notificationManager.notify(0, builder.build())
-    }
-
-    init {
-        mManager = Manager()
     }
 }

@@ -1,25 +1,24 @@
 package com.openclassrooms.firebaseREM
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.openclassrooms.firebaseREM.ItemDetailFragment.Companion.ARG_ITEM_ID
 import com.openclassrooms.firebaseREM.model.Property
 import com.openclassrooms.firebaseREM.viewmodel.MainViewModel
 
 
 class ModifyPropertyFragment : Fragment() {
 
-    var mMainViewModel: MainViewModel? = null
+    private var mMainViewModel: MainViewModel? = null
     private var item: Property? = null
     lateinit var type: TextView
     lateinit var price: TextView
-    lateinit var avatar: TextView
+    private lateinit var avatar: TextView
     lateinit var description: TextView
     lateinit var surface: TextView
     lateinit var numberOfBathrooms: Spinner
@@ -27,15 +26,16 @@ class ModifyPropertyFragment : Fragment() {
     lateinit var numberOfRooms: Spinner
     lateinit var city: TextView
     lateinit var address: TextView
-    lateinit var shops: CheckBox
-    lateinit var schools: CheckBox
-    lateinit var parc: CheckBox
+    private lateinit var shops: CheckBox
+    private lateinit var schools: CheckBox
+    private lateinit var parc: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mMainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        mMainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         arguments?.let { bundle ->
             if (bundle.containsKey(ARG_ITEM_ID)) {
+                @Suppress("DEPRECATION")
                 item = bundle.getSerializable(ARG_ITEM_ID) as? Property
             }
         }
@@ -46,6 +46,10 @@ class ModifyPropertyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_modify_property, container, false)
+        activity?.findViewById<ImageButton>(R.id.delete_element)?.visibility = View.GONE
+        activity?.findViewById<ImageButton>(R.id.add_element)?.visibility = View.GONE
+        activity?.findViewById<ImageButton>(R.id.modify_property)?.visibility = View.GONE
+        activity?.findViewById<ImageButton>(R.id.sold_property)?.visibility = View.GONE
 
         type = rootView.findViewById(R.id.add_type_property)
         price = rootView.findViewById(R.id.add_price_property)
@@ -67,9 +71,9 @@ class ModifyPropertyFragment : Fragment() {
             )
         }
         adapterForRooms!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        numberOfRooms.setAdapter(adapterForRooms)
-        numberOfBathrooms.setAdapter(adapterForRooms)
-        numberOfBedrooms.setAdapter(adapterForRooms)
+        numberOfRooms.adapter = adapterForRooms
+        numberOfBathrooms.adapter = adapterForRooms
+        numberOfBedrooms.adapter = adapterForRooms
 
         item?.let {
             type.text = item!!.type
@@ -86,43 +90,41 @@ class ModifyPropertyFragment : Fragment() {
             numberOfRooms.setSelection(item!!.numberOfRooms - 1)
             address.text = item!!.address
             adapterForRooms.notifyDataSetChanged()
-
-            if (item!!.closeToShops) {
-                shops.isChecked = true
-            }
-            if (item!!.closeToSchools) {
-                schools.isChecked = true
-            }
-            if (item!!.closeToParc) {
-                parc.isChecked = true
-            }
+            if (item!!.closeToShops == 1) { shops.isChecked = true }
+            if (item!!.closeToSchools == 1) { schools.isChecked = true }
+            if (item!!.closeToParc == 1) { parc.isChecked = true }
         }
 
-
         rootView.findViewById<Button>(R.id.save_modification).setOnClickListener {
-
-            mMainViewModel?.updateType(item!!.id, type.text.toString())
-            mMainViewModel?.updatePrice(item!!.id, price.text.toString().toInt())
-            mMainViewModel?.updatePropertyAvatar(item!!.id, avatar.text.toString())
-            mMainViewModel?.updateDescription(item!!.id, description.text.toString())
-            mMainViewModel?.updateSurface(item!!.id, surface.text.toString().toInt())
-            mMainViewModel?.updateCity(item!!.id, city.text.toString())
-            mMainViewModel?.updateAddress(item!!.id, address.text.toString())
-            mMainViewModel?.updateCloseToParcBoolean(item!!.id, if(parc.isChecked) { true } else { false })
-            mMainViewModel?.updateCloseToSchoolsBoolean(item!!.id, if(schools.isChecked) { true } else { false })
-            mMainViewModel?.updateCloseToShopsBoolean(item!!.id, if(shops.isChecked) { true } else { false })
-            mMainViewModel?.updateNumberOfRooms(item!!.id, numberOfRooms.selectedItem.toString().toInt())
-            mMainViewModel?.updateNumberOfBedRooms(item!!.id, numberOfBedrooms.selectedItem.toString().toInt())
-            mMainViewModel?.updateNumberOfBathRooms(item!!.id, numberOfBathrooms.selectedItem.toString().toInt())
-            val intent = Intent(context, ItemListActivity::class.java).apply {
+            item!!.id.let { it1 -> mMainViewModel?.updateType(it1, type.text.toString()) }
+            item!!.id.let { it1 -> mMainViewModel?.updatePrice(it1, price.text.toString().toInt()) }
+            item!!.id.let { it1 -> mMainViewModel?.updatePropertyAvatar(it1, avatar.text.toString()) }
+            item!!.id.let { it1 -> mMainViewModel?.updateDescription(it1, description.text.toString()) }
+            item!!.id.let { it1 -> mMainViewModel?.updateSurface(it1, surface.text.toString().toInt()) }
+            item!!.id.let { it1 -> mMainViewModel?.updateCity(it1, city.text.toString()) }
+            item!!.id.let { it1 -> mMainViewModel?.updateAddress(it1, address.text.toString()) }
+            item!!.id.let { it1 -> mMainViewModel?.updateCloseToParc(it1, if(parc.isChecked) {1} else {0}) }
+            item!!.id.let { it1 -> mMainViewModel?.updateCloseToSchools(it1, if(schools.isChecked) {1} else {0}) }
+            item!!.id.let { it1 -> mMainViewModel?.updateCloseToShops(it1, if(shops.isChecked) {1} else {0}) }
+            item!!.id.let { it1 -> mMainViewModel?.updateNumberOfRooms(it1, numberOfRooms.selectedItem.toString().toInt()) }
+            item!!.id.let { it1 -> mMainViewModel?.updateNumberOfBedRooms(it1, numberOfBedrooms.selectedItem.toString().toInt()) }
+            item!!.id.let { it1 -> mMainViewModel?.updateNumberOfBathRooms(it1, numberOfBathrooms.selectedItem.toString().toInt()) }
+            val fragment = ItemDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ItemDetailFragment.ARG_ITEM_ID_BY_STRING, item?.address)
+                }
             }
-            context?.startActivity(intent)
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.item_detail_container, fragment).addToBackStack(this.toString())
+                .commit()
 
         }
         return rootView
     }
 
-
+    companion object {
+        const val ARG_ITEM_ID = "item_id"
+    }
 }
 
 

@@ -1,45 +1,36 @@
 package com.openclassrooms.firebaseREM.api
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentReference
-import com.openclassrooms.firebaseREM.model.Agent
-import java.time.LocalDate
+import android.content.Context
+import androidx.sqlite.db.SimpleSQLiteQuery
+import com.openclassrooms.firebaseREM.model.PropertyRoom
+import kotlinx.coroutines.CoroutineScope
 
-class Manager() {
+class Manager(database: REMRoomDatabase, context: Context) {
 
-    var mRepository: Repository? = null
+    private var mRepository: Repository? = null
 
     init {
-        mRepository = Repository()
+
+        mRepository = Repository(database.remDao(), context)
     }
 
     // --- COLLECTION REFERENCE ---
 
-    fun getUsersCollection(listener: Repository.AgentsListener?) {
+    suspend fun getPropertysCollection(listener: Repository.PropertysListener?, coroutineScope: CoroutineScope) {
         if (listener != null) {
-            mRepository?.getUsersCollection(listener)
+            mRepository?.getPropertysCollection(listener, coroutineScope)
         }
     }
 
-    fun getPropertysCollection(listener: Repository.PropertysListener?) {
+    suspend fun getElementsCollection(listener: Repository.ElementsListener?, coroutineScope: CoroutineScope) {
         if (listener != null) {
-            mRepository?.getPropertysCollection(listener)
-        }
-    }
-
-    fun getElementsCollection(listener: Repository.ElementsListener?) {
-        if (listener != null) {
-            mRepository?.getElementsCollection(listener)
+            mRepository?.getElementsCollection(listener, coroutineScope)
         }
     }
 
     // --- CREATE FIREBASE ---
 
-    fun createUser(id: String?, avatar: String?, name: String?): Task<Void?>? {
-        return mRepository?.createUser(id, avatar, name)
-    }
-
-    fun createProperty(
+    suspend fun createProperty(
         type: String,
         price: Int,
         avatar1: String,
@@ -52,14 +43,14 @@ class Manager() {
         address: String,
         createDate: String,
         saleDate: String,
-        closeToShops: Boolean,
-        closeToSchools: Boolean,
-        closeToParc: Boolean,
+        closeToShops: Int,
+        closeToSchools: Int,
+        closeToParc: Int,
         agentWhoAdd: String,
         agentWhoSells: String,
         numberOfPhotos: Int
-    ): Task<DocumentReference?>? {
-        return mRepository?.createProperty(
+    ) {
+        mRepository?.createProperty(
             type,
             price,
             avatar1,
@@ -81,112 +72,91 @@ class Manager() {
         )
     }
 
-    fun createElement(
+    suspend fun createElement(
+        elementId: String,
         photo: String,
-        propertyId: String?,
+        propertyId: String,
         isSelected: Boolean,
-        typeOfElement: String?
-    ): Task<DocumentReference?>? {
-        return mRepository?.createElement(photo, propertyId, isSelected, typeOfElement)
+        typeOfElement: String,
+    ) {
+        mRepository?.createElement(elementId, photo, propertyId, isSelected, typeOfElement)
     }
 
-    // --- GET FIREBASE ---
+    /* fun updateElementSelected(id: String, newSelected: Boolean) {
+        mRepository?.updateElementSelected(id, newSelected)
+    }*/
 
-    fun getUser(id: String?, listener: Repository.OnUserSuccessListener?) {
-        if (listener != null) {
-            mRepository?.getUser(id, listener)
-        }
+    suspend fun updateAgentWhoSells(id: String, newAgentWhoSells: String) {
+        mRepository?.updateAgentWhoSells(id, newAgentWhoSells)
     }
 
-    fun getCurrentUser(): Agent? {
-        return mRepository?.getCurrentUser()
+    suspend fun updateSaleDate(id: String, newSaleDate: String) {
+        mRepository?.updateSaleDate(id, newSaleDate)
     }
 
-    // --- UPDATE FIREBASE ---
-
-    fun updateUserName(id: String?, name: String?): Task<Void?>? {
-        return mRepository?.updateUserName(id, name)
+    suspend fun updateType(id: String, newType: String) {
+        mRepository?.updateType(id, newType)
     }
 
-    fun updateUserAvatar(id: String?, avatar: String?): Task<Void?>? {
-        return mRepository?.updateUserAvatar(id, avatar)
+    suspend fun updatePrice(id: String, newPrice: Int) {
+        mRepository?.updatePrice(id, newPrice)
     }
 
-    fun updateElementSelected(id: String?, newSelected: Boolean): Task<Void?>? {
-        return mRepository?.updateElementSelected(id, newSelected)
+    suspend fun updatePropertyAvatar(id: String, newAvatar: String) {
+        mRepository?.updatePropertyAvatar(id, newAvatar)
     }
 
-    fun updateAgentWhoSells(id: String?, newAgentWhoSells: String?): Task<Void?>? {
-        return mRepository?.updateAgentWhoSells(id, newAgentWhoSells)
+    suspend fun updateDescription(id: String, newDescription: String) {
+        mRepository?.updateDescription(id, newDescription)
     }
 
-    fun updateSaleDate(id: String?, newSaleDate: String?): Task<Void?>? {
-        return mRepository?.updateSaleDate(id, newSaleDate)
+    suspend fun updateSurface(id: String, newSurface: Int) {
+        mRepository?.updateSurface(id, newSurface)
     }
 
-    fun updateType(id: String?, newType: String?): Task<Void?>? {
-        return mRepository?.updateType(id, newType)
+    suspend fun updateCity(id: String, newCity: String) {
+        mRepository?.updateCity(id, newCity)
     }
 
-    fun updatePrice(id: String?, newPrice: Int?): Task<Void?>? {
-        return mRepository?.updatePrice(id, newPrice)
+    suspend fun updateAddress(id: String, newAddress: String) {
+        mRepository?.updateAddress(id, newAddress)
     }
 
-    fun updatePropertyAvatar(id: String?, newAvatar: String?): Task<Void?>? {
-        return mRepository?.updatePropertyAvatar(id, newAvatar)
+    suspend fun updateCloseToParc(id: String, newParcBoolean: Int) {
+        mRepository?.updateCloseToParc(id, newParcBoolean)
     }
 
-    fun updateDescription(id: String?, newDescription: String?): Task<Void?>? {
-        return mRepository?.updateDescription(id, newDescription)
+    suspend fun updateCloseToSchools(id: String, newSchoolsBoolean: Int) {
+        mRepository?.updateCloseToSchools(id, newSchoolsBoolean)
     }
 
-    fun updateSurface(id: String?, newSurface: Int?): Task<Void?>? {
-        return mRepository?.updateSurface(id, newSurface)
+    suspend fun updateCloseToShops(id: String, newShopsBoolean: Int) {
+        mRepository?.updateCloseToShops(id, newShopsBoolean)
     }
 
-    fun updateCity(id: String?, newCity: String?): Task<Void?>? {
-        return mRepository?.updateCity(id, newCity)
+    suspend fun updateNumberOfRooms(id: String, newNumberOfRooms: Int) {
+        mRepository?.updateNumberOfRooms(id, newNumberOfRooms)
     }
 
-    fun updateAddress(id: String?, newAddress: String?): Task<Void?>? {
-        return mRepository?.updateAddress(id, newAddress)
+    suspend fun updateNumberOfBedRooms(id: String, newNumberOfBedRooms: Int) {
+        mRepository?.updateNumberOfBedRooms(id, newNumberOfBedRooms)
     }
 
-    fun updateCloseToParcBoolean(id: String?, newParcBoolean: Boolean?): Task<Void?>? {
-        return mRepository?.updateCloseToParcBoolean(id, newParcBoolean)
+    suspend fun updateNumberOfBathRooms(id: String, newNumberOfBathRooms: Int) {
+        mRepository?.updateNumberOfBathRooms(id, newNumberOfBathRooms)
     }
 
-    fun updateCloseToSchoolsBoolean(id: String?, newSchoolsBoolean: Boolean?): Task<Void?>? {
-        return mRepository?.updateCloseToSchoolsBoolean(id, newSchoolsBoolean)
+    suspend fun updateNumberOfPhotos(id: String, newNumberOfPhotos: Int) {
+        mRepository?.updateNumberOfPhotos(id, newNumberOfPhotos)
     }
 
-    fun updateCloseToShopsBoolean(id: String?, newShopsBoolean: Boolean?): Task<Void?>? {
-        return mRepository?.updateCloseToShopsBoolean(id, newShopsBoolean)
-    }
-
-    fun updateNumberOfRooms(id: String?, newNumberOfRooms: Int?): Task<Void?>? {
-        return mRepository?.updateNumberOfRooms(id, newNumberOfRooms)
-    }
-
-    fun updateNumberOfBedRooms(id: String?, newNumberOfBedRooms: Int?): Task<Void?>? {
-        return mRepository?.updateNumberOfBedRooms(id, newNumberOfBedRooms)
-    }
-
-    fun updateNumberOfBathRooms(id: String?, newNumberOfBathRooms: Int?): Task<Void?>? {
-        return mRepository?.updateNumberOfBathRooms(id, newNumberOfBathRooms)
-    }
-
-    fun updateNumberOfPhotos(id: String?, newNumberOfPhotos: Int?): Task<Void?>? {
-        return mRepository?.updateNumberOfPhotos(id, newNumberOfPhotos)
+    suspend fun getFilter(sqLiteQuery: SimpleSQLiteQuery): MutableList<PropertyRoom> {
+        return mRepository!!.getFilter(sqLiteQuery)
     }
 
     // --- DELETE FIREBASE ---
 
-    fun deleteUser(id: String?) {
-        mRepository?.deleteUser(id)
-    }
-
-    fun deleteElement(id: String?, onDeleted: () -> Unit) {
+    suspend fun deleteElement(id: String?, onDeleted: () -> Unit) {
         mRepository?.deleteElement(id, onDeleted)
     }
 }

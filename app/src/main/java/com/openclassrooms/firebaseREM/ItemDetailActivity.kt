@@ -2,8 +2,6 @@ package com.openclassrooms.firebaseREM
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 
@@ -34,7 +32,7 @@ class ItemDetailActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            val fragment = ItemDetailFragment().apply {
+            @Suppress("DEPRECATION") val fragment = ItemDetailFragment().apply {
                 arguments = Bundle().apply {
                     if (intent.getSerializableExtra(ItemDetailFragment.ARG_ITEM_ID) != null) {
                         putSerializable(

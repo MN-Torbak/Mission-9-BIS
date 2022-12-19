@@ -3,6 +3,8 @@
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="ContentDescription,RtlSymmetry"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fond">
@@ -38,11 +40,11 @@
                 android:background="@drawable/corner_spinner"
                 android:ems="9"
                 android:gravity="center_vertical"
-                android:hint="URL Photo"
+                android:hint="@string/url_photo"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
-                android:paddingLeft="10dp"/>
+                android:paddingStart="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -61,11 +63,11 @@
                 android:background="@drawable/corner_spinner"
                 android:ems="9"
                 android:gravity="center_vertical"
-                android:hint="Write the Type"
+                android:hint="@string/write_the_type"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
-                android:paddingLeft="10dp" />
+                android:paddingStart="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -85,11 +87,11 @@
                 android:background="@drawable/corner_spinner"
                 android:ems="9"
                 android:gravity="center_vertical"
-                android:hint="URL Photo"
+                android:hint="@string/url_photo"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
-                android:paddingLeft="10dp"/>
+                android:paddingStart="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -108,11 +110,11 @@
                 android:background="@drawable/corner_spinner"
                 android:ems="9"
                 android:gravity="center_vertical"
-                android:hint="Write the Type"
+                android:hint="@string/write_the_type"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
-                android:paddingLeft="10dp" />
+                android:paddingStart="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -132,11 +134,11 @@
                 android:background="@drawable/corner_spinner"
                 android:ems="9"
                 android:gravity="center_vertical"
-                android:hint="URL Photo"
+                android:hint="@string/url_photo"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
-                android:paddingLeft="10dp"/>
+                android:paddingStart="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -155,11 +157,11 @@
                 android:background="@drawable/corner_spinner"
                 android:ems="9"
                 android:gravity="center_vertical"
-                android:hint="Write the Type"
+                android:hint="@string/write_the_type"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
-                android:paddingLeft="10dp" />
+                android:paddingStart="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -179,11 +181,11 @@
                 android:background="@drawable/corner_spinner"
                 android:ems="9"
                 android:gravity="center_vertical"
-                android:hint="URL Photo"
+                android:hint="@string/url_photo"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
-                android:paddingLeft="10dp"/>
+                android:paddingStart="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -202,11 +204,11 @@
                 android:background="@drawable/corner_spinner"
                 android:ems="9"
                 android:gravity="center_vertical"
-                android:hint="Write the Type"
+                android:hint="@string/write_the_type"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
-                android:paddingLeft="10dp" />
+                android:paddingStart="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -226,11 +228,11 @@
                 android:background="@drawable/corner_spinner"
                 android:ems="9"
                 android:gravity="center_vertical"
-                android:hint="URL Photo"
+                android:hint="@string/url_photo"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
-                android:paddingLeft="10dp"/>
+                android:paddingStart="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -249,11 +251,11 @@
                 android:background="@drawable/corner_spinner"
                 android:ems="9"
                 android:gravity="center_vertical"
-                android:hint="Write the Type"
+                android:hint="@string/write_the_type"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
-                android:paddingLeft="10dp" />
+                android:paddingStart="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -273,11 +275,11 @@
                 android:background="@drawable/corner_spinner"
                 android:ems="9"
                 android:gravity="center_vertical"
-                android:hint="URL Photo"
+                android:hint="@string/url_photo"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
-                android:paddingLeft="10dp"/>
+                android:paddingStart="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -296,11 +298,11 @@
                 android:background="@drawable/corner_spinner"
                 android:ems="9"
                 android:gravity="center_vertical"
-                android:hint="Write the Type"
+                android:hint="@string/write_the_type"
                 android:inputType="textMultiLine"
                 android:lines="1"
                 android:minLines="1"
-                android:paddingLeft="10dp" />
+                android:paddingStart="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -313,7 +315,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/corner_spinner"
             android:enabled="true"
-            android:text="Save"
+            android:text="@string/save"
             app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_photo6_element_outline"

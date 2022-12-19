@@ -26,6 +26,6 @@ class MainActivity : AppCompatActivity() {
     private fun configureTextViewQuantity() {
         val quantity = Utils.convertDollarToEuro(100)
         textViewQuantity!!.textSize = 20f
-        textViewQuantity!!.text = Integer.toString(quantity)
+        textViewQuantity!!.text = quantity.toString()
     }
 }

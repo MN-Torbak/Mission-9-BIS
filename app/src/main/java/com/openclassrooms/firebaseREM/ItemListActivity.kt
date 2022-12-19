@@ -7,53 +7,54 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.bumptech.glide.Glide
 import com.google.android.material.slider.RangeSlider
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.openclassrooms.firebaseREM.api.Repository
 import com.openclassrooms.firebaseREM.model.Property
+import com.openclassrooms.firebaseREM.model.PropertyRoom
+import com.openclassrooms.firebaseREM.model.toProperty
 import com.openclassrooms.firebaseREM.viewmodel.MainViewModel
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.time.*
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.*
 
 
 class ItemListActivity : AppCompatActivity() {
 
     private var twoPane: Boolean = false
-    var mMainViewModel: MainViewModel? = null
-    lateinit var recyclerView: RecyclerView
-    lateinit var checkBoxSold: CheckBox
-    lateinit var checkBoxRecentlyPutOnTheMarket: CheckBox
-    lateinit var checkBoxCloseToSchool: CheckBox
-    lateinit var checkBoxCloseToShops: CheckBox
-    lateinit var checkBoxCloseToParc: CheckBox
-    lateinit var checkBoxNumbersOfPhotos: CheckBox
-    lateinit var checkBoxSurface: CheckBox
-    lateinit var checkBoxPrice: CheckBox
-    lateinit var numberOfMonths: Spinner
-    lateinit var numberOfPhotos: Spinner
-    lateinit var rangeSliderPrice: RangeSlider
-    lateinit var rangeSliderSurface: RangeSlider
-    lateinit var buttonCancel: Button
-    lateinit var buttonSubmit: Button
-    lateinit var adapter: SimpleItemRecyclerViewAdapter
+
+    private val mMainViewModel: MainViewModel by viewModels()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var checkBoxSold: CheckBox
+    private lateinit var checkBoxRecentlyPutOnTheMarket: CheckBox
+    private lateinit var checkBoxCloseToSchool: CheckBox
+    private lateinit var checkBoxCloseToShops: CheckBox
+    private lateinit var checkBoxCloseToParc: CheckBox
+    private lateinit var checkBoxNumbersOfPhotos: CheckBox
+    private lateinit var checkBoxSurface: CheckBox
+    private lateinit var checkBoxPrice: CheckBox
+    private lateinit var numberOfMonths: Spinner
+    private lateinit var numberOfPhotos: Spinner
+    private lateinit var rangeSliderPrice: RangeSlider
+    private lateinit var rangeSliderSurface: RangeSlider
+    private lateinit var buttonCancel: Button
+    private lateinit var buttonSubmit: Button
+    private lateinit var adapter: SimpleItemRecyclerViewAdapter
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -63,7 +64,7 @@ class ItemListActivity : AppCompatActivity() {
         setupAutoCompleteTextView(propertyListAddress)
         createNotificationChannel()
         enablePersistence()
-        mMainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        //mMainViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(MainViewModel::class.java)
         recyclerView = findViewById(R.id.item_list)
         recyclerView.addItemDecoration(
             DividerItemDecoration(
@@ -106,7 +107,8 @@ class ItemListActivity : AppCompatActivity() {
             }
             buttonSubmit = dialog.findViewById(R.id.submit)
             buttonSubmit.setOnClickListener {
-                showFilteredList(propertyList)
+                showFilteredListWithRoom()
+                //showFilteredList(propertyList)
                 dialog.dismiss()
             }
             val adapterForMonths = this.let {
@@ -116,7 +118,7 @@ class ItemListActivity : AppCompatActivity() {
                 )
             }
             adapterForMonths.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            numberOfMonths.setAdapter(adapterForMonths)
+            numberOfMonths.adapter = adapterForMonths
             numberOfPhotos = dialog.findViewById(R.id.photo_spinner_dialog)
             val adapterForPhotos = this.let {
                 ArrayAdapter.createFromResource(
@@ -125,7 +127,7 @@ class ItemListActivity : AppCompatActivity() {
                 )
             }
             adapterForPhotos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            numberOfPhotos.setAdapter(adapterForPhotos)
+            numberOfPhotos.adapter = adapterForPhotos
             rangeSliderPrice = dialog.findViewById(R.id.rangerSlider_price)
             rangeSliderPrice.setLabelFormatter { value: Float ->
                 val format = NumberFormat.getCurrencyInstance()
@@ -148,7 +150,7 @@ class ItemListActivity : AppCompatActivity() {
             findViewById<ImageButton>(R.id.go_to_list).visibility = View.GONE
         }
 
-        mMainViewModel?.Propertys?.observe(this) {
+        mMainViewModel.propertys.observe(this) {
             if (it != null) {
                 propertyList.addAll(it)
                 for (Property in it) {
@@ -160,8 +162,8 @@ class ItemListActivity : AppCompatActivity() {
         }
     }
 
-    val propertyList: MutableList<Property?> = ArrayList()
-    val propertyListAddress: MutableList<String> = ArrayList()
+    private val propertyList: MutableList<Property?> = ArrayList()
+    private val propertyListAddress: MutableList<String> = ArrayList()
 
     private fun setupRecyclerView(recyclerView: RecyclerView, list: MutableList<Property?>) {
         recyclerView.adapter = SimpleItemRecyclerViewAdapter(this, list, twoPane)
@@ -180,26 +182,29 @@ class ItemListActivity : AppCompatActivity() {
             return ViewHolder(view)
         }
 
-        fun updateList (list : MutableList<Property?>) {
-          adapterPropertyList = list
+        fun updateList(list: MutableList<Property?>) {
+            adapterPropertyList = list
         }
 
         var selected = -1
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = adapterPropertyList[position]
-            Glide.with(holder.avatarView.getContext())
+            Glide.with(holder.avatarView.context)
                 .load(item?.avatar1)
                 .centerCrop()
                 .into(holder.avatarView)
             holder.typeView.text = item?.type
             holder.cityView.text = item?.city
-            holder.priceView.text = item?.price.toString() + " €"
+            holder.priceView.text = buildString {
+                append(item?.price.toString())
+                append(" €")
+            }
             if (item?.saleDate == "") {
-                holder.freeOrSaleView.text = "Available"
+                holder.freeOrSaleView.text = buildString { append("Available") }
                 holder.freeOrSaleView.setTextColor(Color.parseColor("#32CD32"))
             } else {
-                holder.freeOrSaleView.text = "Sold"
+                holder.freeOrSaleView.text = buildString { append("Sold") }
                 holder.freeOrSaleView.setTextColor(Color.parseColor("#ff2d49"))
             }
             holder.freeOrSaleView
@@ -214,11 +219,11 @@ class ItemListActivity : AppCompatActivity() {
                 notifyItemChanged(selected)
                 selected = position
                 notifyItemChanged(selected)
-                val item = v.tag as Property
+                val itemProperty = v.tag as Property
                 if (twoPane) {
                     val fragment = ItemDetailFragment().apply {
                         arguments = Bundle().apply {
-                            putSerializable(ItemDetailFragment.ARG_ITEM_ID, item)
+                            putSerializable(ItemDetailFragment.ARG_ITEM_ID, itemProperty)
                         }
                     }
                     parentActivity.supportFragmentManager
@@ -227,12 +232,11 @@ class ItemListActivity : AppCompatActivity() {
                         .commit()
                 } else {
                     val intent = Intent(v.context, ItemDetailActivity::class.java).apply {
-                        putExtra(ItemDetailFragment.ARG_ITEM_ID, item)
+                        putExtra(ItemDetailFragment.ARG_ITEM_ID, itemProperty)
                     }
                     v.context.startActivity(intent)
                 }
             }
-
 
             with(holder.itemView) {
                 tag = item
@@ -251,7 +255,7 @@ class ItemListActivity : AppCompatActivity() {
         }
     }
 
-    fun createProperty() {
+    private fun createProperty() {
         val fragment = AddPropertyFragment().apply {
             arguments = Bundle().apply {
             }
@@ -267,7 +271,7 @@ class ItemListActivity : AppCompatActivity() {
         }
     }
 
-    fun goToMapFragment() {
+    private fun goToMapFragment() {
         val fragment = Map().apply {
             arguments = Bundle().apply {
             }
@@ -283,7 +287,7 @@ class ItemListActivity : AppCompatActivity() {
         }
     }
 
-    fun goToListFragment() {
+    private fun goToListFragment() {
         val intent = Intent(this, ItemListActivity::class.java)
         startActivity(intent)
     }
@@ -297,8 +301,8 @@ class ItemListActivity : AppCompatActivity() {
         autoTextView.threshold = 1
         autoTextView.setAdapter(adapter)
         autoTextView.setDropDownBackgroundResource(R.color.colorWhite)
-        autoTextView.setDropDownWidth(1000)
-        autoTextView.setOnItemClickListener { parent, view, position, id ->
+        autoTextView.dropDownWidth = 1000
+        autoTextView.setOnItemClickListener { _, _, _, _ ->
             val item = autoTextView.text
             if (twoPane) {
                 val fragment = ItemDetailFragment().apply {
@@ -320,86 +324,149 @@ class ItemListActivity : AppCompatActivity() {
     }
 
     private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = getString(R.string.channel_name)
-            val descriptionText = getString(R.string.channel_description)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("k", name, importance).apply {
-                description = descriptionText
-            }
-            // Register the channel with the system
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        val name = getString(R.string.channel_name)
+        val descriptionText = getString(R.string.channel_description)
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel("k", name, importance).apply {
+            description = descriptionText
         }
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     private fun enablePersistence() {
-        // [START rtdb_enable_persistence]
         Firebase.database.setPersistenceEnabled(true)
-        // [END rtdb_enable_persistence]
     }
 
-   fun showFilteredList(primaryList: MutableList<Property?>){
-        val filteredList: MutableList<Property?> = ArrayList()
-        for (property in primaryList) {
-            val isSoldForManyMonth = ((checkBoxSold.isChecked && (monthsBetweenTwoDates(getReadableDate(), property?.saleDate)) <= numberOfMonths.selectedItem.toString().toInt()) || (!checkBoxSold.isChecked))
-            val isRecentlyPutOnTheMarket = ((checkBoxRecentlyPutOnTheMarket.isChecked && (isMoreThanaMonthsBetweenTwoDates(getReadableDate(), property?.createDate) == false)) || (!checkBoxRecentlyPutOnTheMarket.isChecked))
-            val isCloseToShops = ((checkBoxCloseToShops.isChecked && (property?.closeToShops == true)) || (!checkBoxCloseToShops.isChecked))
-            val isCloseToSchool = ((checkBoxCloseToSchool.isChecked && (property?.closeToSchools == true) ) || (!checkBoxCloseToSchool.isChecked))
-            val isCloseToParc = ((checkBoxCloseToParc.isChecked && (property?.closeToParc == true) ) || (!checkBoxCloseToParc.isChecked))
-            val enoughNumberOfPhotos = ((checkBoxNumbersOfPhotos.isChecked && property?.numberOfPhotos!! >= numberOfPhotos.selectedItem.toString().toInt()) || (!checkBoxNumbersOfPhotos.isChecked))
-            val surfaceSize = ((checkBoxSurface.isChecked && ((property?.surface!! >= rangeSliderSurface.values.minOrNull()!!) && (property.surface <= rangeSliderSurface.values.maxOrNull()!!))) || (!checkBoxSurface.isChecked))
-            val price = ((checkBoxPrice.isChecked && ((property?.price!! >= rangeSliderPrice.values.minOrNull()!!) && (property.price <= rangeSliderPrice.values.maxOrNull()!!))) || (!checkBoxPrice.isChecked))
-            if (
-                isSoldForManyMonth &&
-                isRecentlyPutOnTheMarket &&
-                isCloseToShops &&
-                isCloseToSchool &&
-                isCloseToParc &&
-                enoughNumberOfPhotos &&
-                surfaceSize &&
-                price
-            ){
-                filteredList.add(property)
+    private fun convertChoiceMonthIntoDate(month: Int): String {
+        val df = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+        val c = Calendar.getInstance()
+        c.add(Calendar.MONTH, -month)
+        val localDate = LocalDateTime.ofInstant(c.toInstant(), c.timeZone.toZoneId()).toLocalDate()
+        return localDate.format(df)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun showFilteredListWithRoom() {
+        var queryString = String()
+        val args = mutableListOf<String>()
+        var containsCondition = false
+        queryString += "SELECT * FROM PropertyRoom"
+        if (checkBoxSold.isChecked) {
+            queryString += " WHERE"
+            queryString += " saleDate IS NOT NULL"
+            queryString += " AND"
+            queryString += " saleDate > "
+            queryString += "\"" + convertChoiceMonthIntoDate(numberOfMonths.selectedItem.toString().toInt()) + "\""
+            args.add(checkBoxSold.toString())
+            containsCondition = true
+        }
+        if (checkBoxRecentlyPutOnTheMarket.isChecked) {
+            if (containsCondition) {
+                queryString += " AND"
+            } else {
+                queryString += " WHERE"
+                containsCondition = true
             }
+            queryString += " createDate > "
+            queryString += "\"" + dateNowSubtract31() + "\""
+            args.add(checkBoxCloseToShops.toString())
         }
-       val currentAdapter = recyclerView.adapter as SimpleItemRecyclerViewAdapter
-       currentAdapter.updateList(filteredList)
-       currentAdapter.notifyDataSetChanged()
-    }
-
-    fun monthsBetweenTwoDates (todayDate: String?, originalDate: String?): Int {
-        if (originalDate == "") {
-            return 25
-        } else {
-            val df = DateTimeFormatter.ofPattern("dd/M/yyyy")
-            val d1 = LocalDate.parse(todayDate, df)
-            val d2 = LocalDate.parse(originalDate, df)
-            val datediff: Long = ChronoUnit.MONTHS.between(d1, d2)
-            return datediff.toInt()
+        if (checkBoxCloseToShops.isChecked) {
+            if (containsCondition) {
+                queryString += " AND"
+            } else {
+                queryString += " WHERE"
+                containsCondition = true
+            }
+            queryString += " closeToShops = 1"
+            args.add(checkBoxCloseToShops.toString())
+        }
+        if (checkBoxCloseToSchool.isChecked) {
+            if (containsCondition) {
+                queryString += " AND"
+            } else {
+                queryString += " WHERE"
+                containsCondition = true
+            }
+            queryString += " closeToSchools = 1"
+            args.add(checkBoxCloseToSchool.toString())
+        }
+        if (checkBoxCloseToParc.isChecked) {
+            if (containsCondition) {
+                queryString += " AND"
+            } else {
+                queryString += " WHERE"
+                containsCondition = true
+            }
+            queryString += " closeToParc = 1"
+            args.add(checkBoxCloseToParc.toString())
+        }
+        if (checkBoxNumbersOfPhotos.isChecked) {
+            if (containsCondition) {
+                queryString += " AND"
+            } else {
+                queryString += " WHERE"
+                containsCondition = true
+            }
+            queryString += " numberOfPhotos >= "
+            queryString += numberOfPhotos.selectedItem.toString()
+            args.add(checkBoxNumbersOfPhotos.toString())
+        }
+        if (checkBoxSurface.isChecked) {
+            if (containsCondition) {
+                queryString += " AND"
+            } else {
+                queryString += " WHERE"
+                containsCondition = true
+            }
+            queryString += " surface >= "
+            queryString += rangeSliderSurface.values.minOrNull()
+            queryString += " AND"
+            queryString += " surface <= "
+            queryString += rangeSliderSurface.values.maxOrNull()
+            args.add(checkBoxSurface.toString())
+        }
+        if (checkBoxPrice.isChecked) {
+            if (containsCondition) {
+                queryString += " AND"
+            } else {
+                queryString += " WHERE"
+                containsCondition = true
+            }
+            queryString += " price >= "
+            queryString += rangeSliderPrice.values.minOrNull()!!
+            queryString += " AND"
+            queryString += " price <= "
+            queryString += rangeSliderPrice.values.maxOrNull()
+            args.add(checkBoxPrice.toString())
+        }
+        val sqLiteQuery = SimpleSQLiteQuery(queryString)
+        mMainViewModel.getFilter(sqLiteQuery)
+        val currentAdapter = recyclerView.adapter as SimpleItemRecyclerViewAdapter
+        mMainViewModel.filterList.observe(this) {
+            currentAdapter.updateList(swapTypeOfList(it))
+            currentAdapter.notifyDataSetChanged()
         }
     }
 
-    fun isMoreThanaMonthsBetweenTwoDates (todayDate: String?, originalDate: String?): Boolean {
-        val df = DateTimeFormatter.ofPattern("dd/M/yyyy")
-        val d1 = LocalDate.parse(todayDate, df)
-        val d2 = LocalDate.parse(originalDate, df)
-        val datediff: Long = ChronoUnit.DAYS.between(d1, d2)
-        if (datediff < 31) {
-            return true
-        } else {
-               return false
+    private fun swapTypeOfList(primaryList: MutableList<PropertyRoom>): MutableList<Property?> {
+        val propertys: MutableList<Property?> = ArrayList()
+        for (propertyRoom in primaryList) {
+            propertys.add(propertyRoom.toProperty())
         }
+        return propertys
     }
 
-    private fun getReadableDate(): String? {
-        val now = Date()
-        val formatter = SimpleDateFormat("dd/MM/YYYY", Locale.getDefault())
-        return formatter.format(now)
+    private fun dateNowSubtract31(): String? {
+        val cal = Calendar.getInstance()
+        cal.time = Date()
+        cal.add(Calendar.DATE, -31)
+        val dateBefore31Days = cal.time
+        val formatter = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
+        return formatter.format(dateBefore31Days)
+
     }
-
-
 }
+

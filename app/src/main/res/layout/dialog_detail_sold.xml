@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/background_detail"
+    tools:ignore="RtlSymmetry"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
         android:padding="7dp"
-        android:text="Real Estate Salesman: "
+        android:text="@string/real_estate_salesman"
         android:textColor="@color/colorBlack"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -34,21 +36,22 @@
             android:layout_width="140dp"
             android:layout_height="40dp"
             android:ems="10"
-            android:hint="Name of Agent"
-            android:paddingLeft="8dp"
+            android:hint="@string/name_of_agent"
+            android:paddingStart="8dp"
             android:gravity="center_vertical"
             android:background="@drawable/corner_spinner"
             android:inputType="textMultiLine"
             android:lines="1"
-            android:minLines="1" />
+            android:minLines="1"
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/tewtview_saleDate"
+        android:id="@+id/textview_saleDate"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:text="Sale Day"
+        android:text="@string/sale_day"
         android:textSize="20sp"
         android:textStyle="bold"
         android:fontFamily="sans-serif"
@@ -66,7 +69,7 @@
         android:calendarViewShown="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tewtview_saleDate"/>
+        app:layout_constraintTop_toTopOf="@+id/textview_saleDate"/>
 
     <Button
         android:id="@+id/cancel"
@@ -78,7 +81,7 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/corner_spinner"
         android:enabled="true"
-        android:text="Cancel"
+        android:text="@string/cancel"
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/submit"
@@ -94,7 +97,7 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/corner_spinner"
         android:enabled="true"
-        android:text="Submit"
+        android:text="@string/submit"
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

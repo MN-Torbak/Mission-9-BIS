@@ -10,17 +10,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.openclassrooms.firebaseREM.Notifications.NotificationsWorker
+import com.openclassrooms.firebaseREM.notifications.NotificationsWorker
 import com.openclassrooms.firebaseREM.viewmodel.MainViewModel
 
 
 class AddPropertyFragment : Fragment() {
 
-    var mMainViewModel: MainViewModel? = null
+    private var mMainViewModel: MainViewModel? = null
     lateinit var type: TextView
-    lateinit var agentWhoAdd: TextView
+    private lateinit var agentWhoAdd: TextView
     lateinit var price: TextView
-    lateinit var avatar: TextView
+    private lateinit var avatar: TextView
     lateinit var description: TextView
     lateinit var surface: TextView
     lateinit var numberOfBathrooms: Spinner
@@ -28,16 +28,15 @@ class AddPropertyFragment : Fragment() {
     lateinit var numberOfRooms: Spinner
     lateinit var city: TextView
     lateinit var address: TextView
-    lateinit var createDate: DatePicker
-    lateinit var shops: CheckBox
-    lateinit var schools: CheckBox
-    lateinit var parc: CheckBox
+    private lateinit var createDate: DatePicker
+    private lateinit var shops: CheckBox
+    private lateinit var schools: CheckBox
+    private lateinit var parc: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mMainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        mMainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         arguments?.let {
-            //TODO: mettre un bundle pour la modification
         }
     }
 
@@ -69,17 +68,13 @@ class AddPropertyFragment : Fragment() {
             )
         }
         adapterForRooms!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        numberOfRooms.setAdapter(adapterForRooms)
-        numberOfBathrooms.setAdapter(adapterForRooms)
-        numberOfBedrooms.setAdapter(adapterForRooms)
+        numberOfRooms.adapter = adapterForRooms
+        numberOfBathrooms.adapter = adapterForRooms
+        numberOfBedrooms.adapter = adapterForRooms
 
         rootView.findViewById<Button>(R.id.create).setOnClickListener {
 
-            if (!type.text.toString().equals("") && !price.text.toString()
-                    .equals("") && !description.text.toString()
-                    .equals("") && !surface.text.toString().equals(
-                    ""
-                ) && !city.text.toString().equals("")
+            if (type.text.toString() != "" && price.text.toString() != "" && description.text.toString() != "" && surface.text.toString() != "" && city.text.toString() != ""
             ) {
                 mMainViewModel?.createProperty(
                     type.text.toString(),
@@ -92,11 +87,11 @@ class AddPropertyFragment : Fragment() {
                     Integer.parseInt(numberOfBedrooms.selectedItem.toString()),
                     city.text.toString(),
                     address.text.toString(),
-                    "" + createDate.getDayOfMonth() + "/" + (createDate.getMonth()+1) + "/" + createDate.getYear(),
+                    "" + createDate.year + "/" + (createDate.month +1) + "/" + createDate.dayOfMonth,
                     "",
-                    if (shops.isChecked) { true } else { false },
-                    if (schools.isChecked) { true } else { false },
-                    if (parc.isChecked) { true } else { false },
+                    if (shops.isChecked) {1} else {0},
+                    if (schools.isChecked) {1} else {0},
+                    if (parc.isChecked) {1} else {0},
                     agentWhoAdd.text.toString(),
                     "",
                     0
@@ -115,11 +110,12 @@ class AddPropertyFragment : Fragment() {
         return rootView
     }
 
-    fun createNotification() {
+    private fun createNotification() {
         val oneTimeWorkRequest: OneTimeWorkRequest =
             OneTimeWorkRequest.Builder(NotificationsWorker::class.java)
                 .addTag("Notify")
                 .build()
+        @Suppress("DEPRECATION")
         WorkManager.getInstance().enqueue(oneTimeWorkRequest)
     }
 

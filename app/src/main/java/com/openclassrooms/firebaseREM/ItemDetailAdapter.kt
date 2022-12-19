@@ -1,15 +1,13 @@
 package com.openclassrooms.firebaseREM
 
-import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.openclassrooms.firebaseREM.viewmodel.MainViewModel
+import com.openclassrooms.firebaseREM.model.Element
 
 class ItemDetailAdapter(pPhotoProperty: List<Element>?) :
     RecyclerView.Adapter<ItemDetailAdapter.ItemDetailViewHolder>() {
@@ -38,12 +36,11 @@ class ItemDetailAdapter(pPhotoProperty: List<Element>?) :
             .load(element.photo)
             .centerCrop()
             .into(holder.mImageView)
-        holder.mImageView.setOnClickListener { view: View? ->
+        holder.mImageView.setOnClickListener {
             if (clicked) {
                 element.isSelected = false
-                clicked = !clicked
+                clicked = false
                 holder.mImageView.setBackgroundResource(R.drawable.no_border)
-
             }
             else {
                 element.isSelected = true
@@ -68,6 +65,3 @@ class ItemDetailAdapter(pPhotoProperty: List<Element>?) :
 
 }
 
-data class Element(val photo: String = "", val propertyId: String? = "", var isSelected : Boolean, var elementId: String? = "", var typeOfElement: String? = "",) {
-    constructor() : this("","",false,"", "")
-}

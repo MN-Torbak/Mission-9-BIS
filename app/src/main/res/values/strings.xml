@@ -43,5 +43,55 @@
 
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="SoldBy">"Sold by "</string>
+    <string name="AddedBy">"Added by "</string>
+    <string name="Media">Media</string>
+    <string name="Description">Description</string>
+    <string name="Surface">Surface</string>
+    <string name="NumberOfRooms">Number of rooms</string>
+    <string name="NumberOfBathrooms">Number of bathrooms</string>
+    <string name="NumberOfBedrooms">Number of bedrooms</string>
+    <string name="CloseTo">\Close to: \</string>
+    <string name="Location">Location</string>
+    <string name="squareMeter">\ m²\</string>
+    <string name="house_duplex">House, Duplex…</string>
+    <string name="photo_s_url">Photo\'s URL</string>
+    <string name="description">Description</string>
+    <string name="number_of_rooms">Number of Rooms:</string>
+    <string name="number_of_bathrooms">Number of BathRooms:</string>
+    <string name="number_of_bedrooms">Number of BedRooms:</string>
+    <string name="city">City</string>
+    <string name="surface">Surface</string>
+    <string name="price">Price</string>
+    <string name="address">Address</string>
+    <string name="close_to_shops">Close to Shops</string>
+    <string name="close_to_schools">Close to Schools</string>
+    <string name="close_to_parc">Close to Parc</string>
+    <string name="save_modification">Save Modification</string>
+    <string name="imageview_add_property">imageview_add_property</string>
+    <string name="voici_la_valeur_d_un_bien">Voici la valeur d\'un bien :</string>
+    <string name="_0">0</string>
+    <string name="ma_super_activit_num_ro_2">Ma super activité numéro 2</string>
+    <string name="real_estate_salesman">Real Estate Salesman:</string>
+    <string name="name_of_agent">Name of Agent</string>
+    <string name="sale_day">Sale Day</string>
+    <string name="submit">Submit</string>
+    <string name="creation_day">Creation Day</string>
+    <string name="save">Save</string>
+    <string name="room">Room</string>
+    <string name="house">House</string>
+    <string name="paris">Paris</string>
+    <string name="_300_000">300 000 €</string>
+    <string name="sold_during_last">Sold during last</string>
+    <string name="months">Months</string>
+    <string name="recently_put_on_the_market">Recently put on the market</string>
+    <string name="more_than">More than</string>
+    <string name="photo_s">Photo(s)</string>
+    <string name="url_photo">URL Photo</string>
+    <string name="write_the_type">Write the Type</string>
+    <string name="number_of_rooms_">Number of Rooms:</string>
+    <string name="number_of_bathrooms_">Number of BathRooms:</string>
+    <string name="number_of_bedrooms_">Number of BedRooms:</string>
+
 
 </resources>

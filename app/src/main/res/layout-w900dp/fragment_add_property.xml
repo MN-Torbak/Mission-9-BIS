@@ -2,12 +2,14 @@
 
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="ContentDescription,RtlSymmetry"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/fond">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:background="@drawable/fond"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,7 +19,6 @@
             android:layout_height="150dp"
             android:layout_marginTop="10dp"
             app:srcCompat="@drawable/add_imageview"
-            app:layout_constraintEnd_toStartOf="@id/datePickerCreateDate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,8 +37,8 @@
                 android:layout_width="140dp"
                 android:layout_height="40dp"
                 android:ems="10"
-                android:hint="Name of Agent"
-                android:paddingLeft="8dp"
+                android:hint="@string/name_of_agent"
+                android:paddingStart="8dp"
                 android:gravity="center_vertical"
                 android:background="@drawable/corner_spinner"
                 android:inputType="textMultiLine"
@@ -46,12 +47,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/tewtview_createDate"
+            android:id="@+id/textview_createDate"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:text="Creation Day"
-            android:textSize="20dp"
+            android:text="@string/creation_day"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
             android:gravity="center_vertical"
@@ -68,7 +69,7 @@
             android:calendarViewShown="false"
             app:layout_constraintStart_toEndOf="@+id/imageview_add_property"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tewtview_createDate"/>
+            app:layout_constraintTop_toTopOf="@+id/textview_createDate"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/add_type_property_outline"
@@ -85,8 +86,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"
-                android:hint="House, Duplex..."
-                android:paddingLeft="10dp"
+                android:hint="@string/house_duplex"
+                android:paddingStart="10dp"
                 android:gravity="center_vertical"
                 android:background="@drawable/corner_spinner"
                 android:inputType="textMultiLine"
@@ -109,8 +110,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"
-                android:hint="Photo's URL"
-                android:paddingLeft="10dp"
+                android:hint="@string/photo_s_url"
+                android:paddingStart="10dp"
                 android:gravity="center_vertical"
                 android:background="@drawable/corner_spinner"
                 android:inputType="textMultiLine"
@@ -133,8 +134,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Description"
-                android:paddingLeft="10dp"
+                android:hint="@string/description"
+                android:paddingStart="10dp"
                 android:gravity="center_vertical"
                 android:background="@drawable/corner_spinner"
                 android:inputType="textMultiLine"
@@ -143,12 +144,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/tewtview_Rooms"
+            android:id="@+id/textview_Rooms"
             android:layout_width="215dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="30dp"
-            android:text="Number of Rooms: "
+            android:text="@string/number_of_rooms_"
             android:textSize="20sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
@@ -166,25 +167,25 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/corner_spinner"
             android:gravity="center"
-            android:paddingLeft="6dp"
+            android:paddingStart="6dp"
             android:spinnerMode="dropdown"
-            app:layout_constraintStart_toEndOf="@id/tewtview_Rooms"
+            app:layout_constraintStart_toEndOf="@id/textview_Rooms"
             app:layout_constraintTop_toBottomOf="@+id/add_price_property_outline" />
 
         <TextView
-            android:id="@+id/tewtview_BathRooms"
+            android:id="@+id/textview_BathRooms"
             android:layout_width="215dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="30dp"
-            android:text="Number of BathRooms: "
-            android:textSize="20dp"
+            android:text="@string/number_of_bathrooms_"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tewtview_Rooms" />
+            app:layout_constraintTop_toBottomOf="@id/textview_Rooms" />
 
         <Spinner
             android:id="@+id/add_numberOfBathrooms_property"
@@ -195,25 +196,25 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/corner_spinner"
             android:gravity="center"
-            android:paddingLeft="6dp"
+            android:paddingStart="6dp"
             android:spinnerMode="dropdown"
-            app:layout_constraintStart_toEndOf="@id/tewtview_BathRooms"
+            app:layout_constraintStart_toEndOf="@id/textview_BathRooms"
             app:layout_constraintTop_toBottomOf="@id/add_numberOfRooms_property" />
 
         <TextView
-            android:id="@+id/tewtview_BedRooms"
+            android:id="@+id/textview_BedRooms"
             android:layout_width="215dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="30dp"
-            android:text="Number of BedRooms: "
-            android:textSize="20dp"
+            android:text="@string/number_of_bedrooms_"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tewtview_BathRooms" />
+            app:layout_constraintTop_toBottomOf="@id/textview_BathRooms" />
 
         <Spinner
             android:id="@+id/add_numberOfBedrooms_property"
@@ -224,9 +225,9 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/corner_spinner"
             android:gravity="center"
-            android:paddingLeft="6dp"
+            android:paddingStart="6dp"
             android:spinnerMode="dropdown"
-            app:layout_constraintStart_toEndOf="@id/tewtview_BedRooms"
+            app:layout_constraintStart_toEndOf="@id/textview_BedRooms"
             app:layout_constraintTop_toBottomOf="@id/add_numberOfBathrooms_property" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -243,8 +244,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:ems="10"
-                android:hint="City"
-                android:paddingLeft="10dp"
+                android:hint="@string/city"
+                android:paddingStart="10dp"
                 android:gravity="center_vertical"
                 android:background="@drawable/corner_spinner"
                 android:inputType="textMultiLine"
@@ -266,8 +267,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:ems="10"
-                android:hint="Surface"
-                android:paddingLeft="10dp"
+                android:hint="@string/surface"
+                android:paddingStart="10dp"
                 android:gravity="center_vertical"
                 android:background="@drawable/corner_spinner"
                 android:inputType="number"
@@ -289,8 +290,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:ems="10"
-                android:hint="Price"
-                android:paddingLeft="10dp"
+                android:hint="@string/price"
+                android:paddingStart="10dp"
                 android:gravity="center_vertical"
                 android:background="@drawable/corner_spinner"
                 android:inputType="number"
@@ -313,8 +314,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Address"
-                android:paddingLeft="10dp"
+                android:hint="@string/address"
+                android:paddingStart="10dp"
                 android:gravity="center_vertical"
                 android:background="@drawable/corner_spinner"
                 android:inputType="textMultiLine"
@@ -328,10 +329,10 @@
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:padding="7dp"
-            android:text="Close to Shops"
+            android:text="@string/close_to_shops"
             android:textSize="18sp"
             android:button="@null"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             app:layout_constraintStart_toEndOf="@+id/add_city_property_outline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_address_property_outline" />
@@ -342,10 +343,10 @@
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:padding="7dp"
-            android:text="Close to Schools"
+            android:text="@string/close_to_schools"
             android:textSize="18sp"
             android:button="@null"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             app:layout_constraintStart_toEndOf="@+id/add_surface_property_outline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_city_property_outline" />
@@ -356,10 +357,10 @@
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:padding="7dp"
-            android:text="Close to Parc"
+            android:text="@string/close_to_parc"
             android:textSize="18sp"
             android:button="@null"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
             app:layout_constraintStart_toEndOf="@+id/add_price_property_outline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_surface_property_outline" />
@@ -373,7 +374,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
             android:enabled="true"
-            android:text="Save"
+            android:text="@string/save"
             android:background="@drawable/corner_spinner"
             app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"

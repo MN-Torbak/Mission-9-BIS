@@ -15,10 +15,10 @@ import kotlin.Throws
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
+
     @Test
     @Throws(Exception::class)
     fun useAppContext() {
-        // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().context
         Assert.assertEquals("com.openclassrooms.go4lunch", appContext.packageName)
     }

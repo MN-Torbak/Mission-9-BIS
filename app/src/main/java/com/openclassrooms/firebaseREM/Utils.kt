@@ -1,19 +1,20 @@
+@file:Suppress("KDocUnresolvedReference")
+
 package com.openclassrooms.firebaseREM
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.NetworkInfo
-import android.net.wifi.WifiManager
-import android.os.Build
-import android.util.Log
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
 
 
 /**
@@ -27,7 +28,7 @@ object Utils {
      * @return
      */
     fun convertDollarToEuro(dollars: Int): Int {
-        return Math.round(dollars * 0.94).toInt()
+        return (dollars * 0.94).roundToInt()
     }
 
     /**
@@ -36,7 +37,7 @@ object Utils {
      * @return
      */
     fun convertEuroToDollar(euros: Int): Int {
-        return Math.round(euros * 1.06).toInt()
+        return (euros * 1.06).roundToInt()
     }
 
     /**
@@ -45,14 +46,16 @@ object Utils {
      * @return
      */
     val todayDate: String
+        @SuppressLint("SimpleDateFormat")
         get() {
             val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd")
             return dateFormat.format(Date())
         }
 
     val todayDateFrenchFormat: String
+        @SuppressLint("SimpleDateFormat")
         get() {
-            val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy")
+            val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd")
             return dateFormat.format(Date())
         }
 
@@ -64,14 +67,14 @@ object Utils {
      */
 
     fun monthsBetweenTwoDates(todayDate: String?, originalDate: String?): Int {
-        if (originalDate == "") {
-            return 25
+        return if (originalDate == "") {
+            25
         } else {
-            val df = DateTimeFormatter.ofPattern("dd/M/yyyy")
+            val df = DateTimeFormatter.ofPattern("yyyy/MM/dd")
             val d1 = LocalDate.parse(todayDate, df)
             val d2 = LocalDate.parse(originalDate, df)
             val datediff: Long = ChronoUnit.MONTHS.between(d1, d2)
-            return datediff.toInt().absoluteValue
+            datediff.toInt().absoluteValue
         }
     }
 
@@ -85,6 +88,14 @@ object Utils {
             activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
             else -> false
         }
+    }
+
+    fun convertChoiceMonthIntoDate(month: Int): String {
+        val df = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+        val c = Calendar.getInstance()
+        c.add(Calendar.MONTH, -month)
+        val localDate = LocalDateTime.ofInstant(c.toInstant(), c.timeZone.toZoneId()).toLocalDate()
+        return localDate.format(df)
     }
 }
 

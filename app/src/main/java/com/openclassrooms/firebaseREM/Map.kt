@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
@@ -74,14 +73,14 @@ class Map : Fragment(), OnMapReadyCallback {
                 locationListener as LocationListener
             )
         } catch (e: SecurityException) {
-            Log.d("logmap", "requestlocationupdateerror")
+            Log.d("log map", "requestLocationUpdateError")
         }
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        mViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         if (activity?.findViewById<NestedScrollView>(R.id.item_detail_container) != null) {
             twoPane = true
         }
@@ -100,10 +99,10 @@ class Map : Fragment(), OnMapReadyCallback {
                 locationListener!!
             )
         } catch (e: SecurityException) {
-            Log.d("logmap", "requestlocationupdateerror")
+            Log.d("log map", "requestLocationUpdateError")
         }
-        val propertyList: MutableList<com.openclassrooms.firebaseREM.model.Property?> = ArrayList()
-        mViewModel?.Propertys?.observe(this) {
+        val propertyList: MutableList<Property?> = ArrayList()
+        mViewModel?.propertys?.observe(this) {
             if (it != null) {
                 propertyList.addAll(it)
             }
@@ -160,7 +159,7 @@ class Map : Fragment(), OnMapReadyCallback {
         grantResults: IntArray
     ) {
         if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
-            if (grantResults.size > 0
+            if (grantResults.isNotEmpty()
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED
             ) {
                 try {
@@ -173,16 +172,17 @@ class Map : Fragment(), OnMapReadyCallback {
         }
     }
 
-    fun getLatLangFromAddress(strAddress: String?): LatLng? {
+    private fun getLatLangFromAddress(strAddress: String?): LatLng? {
         val coder = Geocoder(requireContext(), Locale.getDefault())
         val address: List<Address>?
         return try {
-            address = coder.getFromLocationName(strAddress, 5)
+            @Suppress("DEPRECATION")
+            address = coder.getFromLocationName(strAddress!!, 5)
             if (address == null) {
                 return LatLng(-10000.0, -10000.0)
             }
             val location: Address = address[0]
-            LatLng(location.getLatitude(), location.getLongitude())
+            LatLng(location.latitude, location.longitude)
         } catch (e: IOException) {
             LatLng(-10000.0, -10000.0)
         }

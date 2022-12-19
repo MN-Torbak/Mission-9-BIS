@@ -1,9 +1,11 @@
 package com.openclassrooms.firebaseREM
 
+import com.openclassrooms.firebaseREM.Utils.convertChoiceMonthIntoDate
 import com.openclassrooms.firebaseREM.Utils.convertEuroToDollar
 import com.openclassrooms.firebaseREM.Utils.todayDateFrenchFormat
 import org.junit.Assert
 import org.junit.Test
+
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -13,34 +15,43 @@ import org.junit.Test
 class ExampleUnitTest {
 
     @Test
-    @Throws(Exception::class)
     fun addition_isCorrect() {
         Assert.assertEquals(4, (2 + 2).toLong())
     }
 
     @Test
-    @Throws(Exception::class)
     fun convertEuroToDollarTest() {
-        val Euro = 1000
-        val Dollar = 1060
-        Assert.assertEquals(Dollar, convertEuroToDollar(Euro))
+        val euro = 1000
+        val dollar = 1060
+        Assert.assertEquals(dollar, convertEuroToDollar(euro))
     }
 
     @Test
-    @Throws(Exception::class)
     fun dateReformedTest() {
-        Assert.assertEquals("22/06/2022", todayDateFrenchFormat)
+        Assert.assertEquals("2022/11/21", todayDateFrenchFormat)
     }
 
     @Test
-    @Throws(Exception::class)
-    fun whenDateisEmptyReturn25Test() {
-        Assert.assertEquals(Utils.monthsBetweenTwoDates("22/7/2022", ""), 25)
+    fun whenDateIsEmptyReturn25Test() {
+        Assert.assertEquals(Utils.monthsBetweenTwoDates("2022/07/22", ""), 25)
     }
 
     @Test
-    @Throws(Exception::class)
-    fun whenDateisEmptyReturn24Test() {
-        Assert.assertEquals(Utils.monthsBetweenTwoDates("22/7/2024", "22/7/2022"), 24)
+    fun whenDateIsEmptyReturn24Test() {
+        Assert.assertEquals(Utils.monthsBetweenTwoDates("2024/07/22", "2022/07/22"), 24)
     }
+
+    @Test
+    fun testUnderstandHowWorkDateString() {
+        Assert.assertTrue("08/11/2022" < "09/11/2021")
+        Assert.assertTrue("2022/11/08" > "2021/11/09")
+        Assert.assertTrue("2022/10/10" < "2022/11/09")
+    }
+
+    @Test
+    fun testConvertIntIntoDate() {
+        val string = convertChoiceMonthIntoDate(2)
+        Assert.assertTrue(string == "2022/09/21")
+    }
+
 }

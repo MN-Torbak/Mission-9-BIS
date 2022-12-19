@@ -28,43 +28,43 @@
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <ImageButton
-            android:id="@+id/modify_property_tablet"
+            android:id="@+id/modify_property"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
-            app:layout_constraintEnd_toStartOf="@id/sold_property_tablet"
+            app:layout_constraintEnd_toStartOf="@id/sold_property"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/fragmentItemDetailRecyclerView"
             app:srcCompat="@drawable/ic_modify_property" />
 
         <ImageButton
-            android:id="@+id/sold_property_tablet"
+            android:id="@+id/sold_property"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
-            app:layout_constraintEnd_toStartOf="@id/delete_element_tablet"
+            app:layout_constraintEnd_toStartOf="@id/delete_element"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/fragmentItemDetailRecyclerView"
             app:srcCompat="@drawable/ic_sold_property" />
 
         <ImageButton
-            android:id="@+id/delete_element_tablet"
+            android:id="@+id/delete_element"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
-            app:layout_constraintEnd_toStartOf="@id/add_element_tablet"
+            app:layout_constraintEnd_toStartOf="@id/add_element"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/fragmentItemDetailRecyclerView"
             app:srcCompat="@drawable/delete_element" />
 
         <ImageButton
-            android:id="@+id/add_element_tablet"
+            android:id="@+id/add_element"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginBottom="10dp"
@@ -85,7 +85,7 @@
 
         <TextView
             android:id="@+id/detail_description_title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
@@ -97,9 +97,10 @@
 
         <TextView
             android:id="@+id/detail_description"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_description_title"
@@ -241,7 +242,7 @@
             android:id="@+id/close_to_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="170dp"
+            android:layout_marginStart="120dp"
             android:layout_marginTop="40dp"
             android:src="@drawable/ic_close_to"
             app:layout_constraintStart_toEndOf="@id/detail_surface_title"
@@ -261,7 +262,7 @@
 
         <TextView
             android:id="@+id/detail_close_to_commodity"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
@@ -274,7 +275,7 @@
             android:id="@+id/location_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="170dp"
+            android:layout_marginStart="120dp"
             android:layout_marginTop="40dp"
             android:src="@drawable/ic_marker_location"
             app:layout_constraintStart_toEndOf="@id/detail_surface_title"
@@ -294,7 +295,7 @@
 
         <TextView
             android:id="@+id/detail_address"
-            android:layout_width="wrap_content"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
@@ -318,10 +319,10 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:id="@+id/detail_map"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="70dp"
             android:layout_marginStart="50dp"
-            app:layout_constraintTop_toBottomOf="@id/detail_description"
-            app:layout_constraintStart_toEndOf="@id/detail_address"
+            app:layout_constraintTop_toBottomOf="@id/numberofbathrooms_img"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             tools:context="com.googlemap.googlemap.MapsActivity"/>
