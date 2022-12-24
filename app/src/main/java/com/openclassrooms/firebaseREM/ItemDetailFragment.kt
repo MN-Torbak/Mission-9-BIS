@@ -2,6 +2,7 @@ package com.openclassrooms.firebaseREM
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -53,7 +54,8 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
         super.onResume()
         mMainViewModel?.refreshPropertysCollection()
         mMainViewModel?.refreshElementsCollection()
-        mMainViewModel?.propertys?.observe(this) { propertys ->
+
+        mMainViewModel?.propertys?.observe(viewLifecycleOwner) { propertys ->
             if (propertys != null) {
                 arguments?.let { bundle ->
                     if (bundle.containsKey(ARG_ITEM_ID)) {
@@ -144,11 +146,14 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
         if (rootView.findViewById<NestedScrollView>(R.id.item_detail_container) != null) {
             twoPane = true
         }
+        activity?.findViewById<ImageButton>(R.id.detail_to_list)?.visibility = View.VISIBLE
+        activity?.findViewById<ImageButton>(R.id.detail_to_list)?.setOnClickListener {
+            goToListFragment()
+        }
         activity?.findViewById<ImageButton>(R.id.add_element)?.visibility = View.VISIBLE
         activity?.findViewById<ImageButton>(R.id.add_element)?.setOnClickListener {
             addElement()
         }
-        //TODO: faire les 3 autres boutons comme add element tablet
         rootView?.findViewById<ImageButton>(R.id.add_element_tablet)?.setOnClickListener {
             addElement()
         }
@@ -156,8 +161,14 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
         activity?.findViewById<ImageButton>(R.id.delete_element)?.setOnClickListener {
             deleteElement(item?.let { createPhotoListElement(it, itemDetailAdapter.mElement) })
         }
+        rootView?.findViewById<ImageButton>(R.id.delete_element_tablet)?.setOnClickListener {
+            deleteElement(item?.let { createPhotoListElement(it, itemDetailAdapter.mElement) })
+        }
         activity?.findViewById<ImageButton>(R.id.modify_property)?.visibility = View.VISIBLE
         activity?.findViewById<ImageButton>(R.id.modify_property)?.setOnClickListener {
+            modifyProperty()
+        }
+        rootView?.findViewById<ImageButton>(R.id.modify_property_tablet)?.setOnClickListener {
             modifyProperty()
         }
         activity?.findViewById<ImageButton>(R.id.sold_property)?.visibility = View.VISIBLE
@@ -213,6 +224,55 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
                         fragmentTransaction.attach(currentFragment)
                     }
                     fragmentTransaction.commit()
+                }
+                dialog.show()
+            }
+        }
+        rootView?.findViewById<ImageButton>(R.id.sold_property_tablet)?.setOnClickListener {
+            val dialog = context?.let { it1 -> Dialog(it1) }
+            if (dialog != null) {
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCancelable(false)
+                dialog.setContentView(R.layout.dialog_detail_sold)
+                datePickerSaleDate = dialog.findViewById(R.id.datePickerSaleDate)
+                nameOfSalesman = dialog.findViewById(R.id.real_estate_salesman)
+                buttonCancel = dialog.findViewById(R.id.cancel)
+                buttonCancel.setOnClickListener {
+                    dialog.dismiss()
+                }
+                buttonSubmit = dialog.findViewById(R.id.submit)
+                buttonSubmit.setOnClickListener {
+                    item?.id?.let { it1 ->
+                        mMainViewModel?.updateAgentWhoSells(
+                            it1,
+                            nameOfSalesman.text.toString()
+                        )
+                    }
+                    item?.id?.let { it1 ->
+                        mMainViewModel?.updateSaleDate(
+                            it1,
+                            "" + datePickerSaleDate.dayOfMonth + "/" + (datePickerSaleDate.month + 1) + "/" + datePickerSaleDate.year
+                        )
+                    }
+                    dialog.dismiss()
+                    rootView.findViewById<TextView>(R.id.detail_sold_by_title).text =
+                        getString(R.string.SoldBy)
+                    rootView.findViewById<TextView>(R.id.detail_name_of_agent_who_sold).text =
+                        buildString {
+                            append(nameOfSalesman.text.toString())
+                            append(", ")
+                        }
+                    rootView.findViewById<TextView>(R.id.detail_sale_date).text =
+                        buildString {
+                            append("")
+                            append(datePickerSaleDate.dayOfMonth)
+                            append("/")
+                            append((datePickerSaleDate.month + 1))
+                            append("/")
+                            append(datePickerSaleDate.year)
+                        }
+                    val intent = Intent(context, ItemListActivity::class.java).apply {}
+                    context?.startActivity(intent)
                 }
                 dialog.show()
             }
@@ -488,17 +548,36 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        googleMap.uiSettings.isZoomControlsEnabled = true
-        googleMap.setMapStyle(
-            MapStyleOptions.loadRawResourceStyle(
-                requireContext(),
-                R.raw.map_style
+        mMainViewModel?.propertys?.observe(this) { propertys ->
+            if (propertys != null) {
+                arguments?.let { bundle ->
+                    if (bundle.containsKey(ARG_ITEM_ID)) {
+                        item = bundle.getSerializable(ARG_ITEM_ID) as? Property
+                        activity?.findViewById<TextView>(R.id.appBarDetailTextView)?.text = item?.type
+                        displayPropertyInformations(item)
+                    } else if (bundle.containsKey(ARG_ITEM_ID_BY_STRING)) {
+                        val arguments = bundle.getString(ARG_ITEM_ID_BY_STRING).toString()
+                        for (property in propertys) {
+                            if (property?.address.toString() == arguments) {
+                                item = property
+                                displayPropertyInformations(item)
+                            }
+                        }
+                    }
+                }
+            }
+            googleMap.uiSettings.isZoomControlsEnabled = true
+            googleMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    requireContext(),
+                    R.raw.map_style
+                )
             )
-        )
-        itemLatLng = getLatLangFromAddress(item?.address + item?.city)
-        googleMap.addMarker(MarkerOptions().position(itemLatLng!!))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(itemLatLng!!))
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(11F))
+            itemLatLng = getLatLangFromAddress(item?.address + item?.city)
+            googleMap.addMarker(MarkerOptions().position(itemLatLng!!))
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(itemLatLng!!))
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(11F))
+        }
     }
 
     private fun getLatLangFromAddress(strAddress: String?): LatLng? {
@@ -535,6 +614,11 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         }
+    }
+
+    private fun goToListFragment() {
+        val intent = Intent(context, ItemListActivity::class.java).apply {}
+        context?.startActivity(intent)
     }
 
     companion object {

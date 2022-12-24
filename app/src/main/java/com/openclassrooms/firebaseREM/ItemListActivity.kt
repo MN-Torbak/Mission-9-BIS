@@ -56,7 +56,6 @@ class ItemListActivity : AppCompatActivity() {
     private lateinit var buttonSubmit: Button
     private lateinit var adapter: SimpleItemRecyclerViewAdapter
 
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +63,6 @@ class ItemListActivity : AppCompatActivity() {
         setupAutoCompleteTextView(propertyListAddress)
         createNotificationChannel()
         enablePersistence()
-        //mMainViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(MainViewModel::class.java)
         recyclerView = findViewById(R.id.item_list)
         recyclerView.addItemDecoration(
             DividerItemDecoration(
@@ -108,7 +106,6 @@ class ItemListActivity : AppCompatActivity() {
             buttonSubmit = dialog.findViewById(R.id.submit)
             buttonSubmit.setOnClickListener {
                 showFilteredListWithRoom()
-                //showFilteredList(propertyList)
                 dialog.dismiss()
             }
             val adapterForMonths = this.let {
@@ -175,7 +172,6 @@ class ItemListActivity : AppCompatActivity() {
         private val twoPane: Boolean
     ) :
         RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
-
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_list_content, parent, false)

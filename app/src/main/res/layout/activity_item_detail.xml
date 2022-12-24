@@ -32,6 +32,16 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
+                android:id="@+id/detail_to_list"
+                android:layout_width="50dp"
+                android:layout_height="43dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintEnd_toStartOf="@id/modify_property"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:srcCompat="@drawable/list_icon" />
+
+            <ImageButton
                 android:id="@+id/modify_property"
                 android:layout_width="50dp"
                 android:layout_height="50dp"

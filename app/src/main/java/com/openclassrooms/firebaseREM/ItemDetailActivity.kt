@@ -32,7 +32,8 @@ class ItemDetailActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            @Suppress("DEPRECATION") val fragment = ItemDetailFragment().apply {
+            @Suppress("DEPRECATION")
+            val fragment = ItemDetailFragment().apply {
                 arguments = Bundle().apply {
                     if (intent.getSerializableExtra(ItemDetailFragment.ARG_ITEM_ID) != null) {
                         putSerializable(

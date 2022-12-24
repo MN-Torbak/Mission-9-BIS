@@ -1,11 +1,13 @@
 package com.openclassrooms.firebaseREM
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.openclassrooms.firebaseREM.model.Property
@@ -14,6 +16,7 @@ import com.openclassrooms.firebaseREM.viewmodel.MainViewModel
 
 class ModifyPropertyFragment : Fragment() {
 
+    private var twoPane: Boolean = false
     private var mMainViewModel: MainViewModel? = null
     private var item: Property? = null
     lateinit var type: TextView
@@ -46,6 +49,9 @@ class ModifyPropertyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_modify_property, container, false)
+        if (activity?.findViewById<ImageButton>(R.id.add_property_button)?.visibility == View.VISIBLE) {
+            twoPane = true
+        }
         activity?.findViewById<ImageButton>(R.id.delete_element)?.visibility = View.GONE
         activity?.findViewById<ImageButton>(R.id.add_element)?.visibility = View.GONE
         activity?.findViewById<ImageButton>(R.id.modify_property)?.visibility = View.GONE
@@ -114,10 +120,15 @@ class ModifyPropertyFragment : Fragment() {
                     putSerializable(ItemDetailFragment.ARG_ITEM_ID_BY_STRING, item?.address)
                 }
             }
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.item_detail_container, fragment).addToBackStack(this.toString())
-                .commit()
 
+            if (twoPane) {
+                val intent = Intent(context, ItemListActivity::class.java).apply {}
+                context?.startActivity(intent)
+            } else {
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.item_detail_container, fragment).addToBackStack(this.toString())
+                    .commit()
+            }
         }
         return rootView
     }
